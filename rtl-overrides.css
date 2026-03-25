@@ -1,0 +1,72 @@
+/* RTL Overrides for Arabic Support */
+
+/* General Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Better Arabic font support */
+    text-align: right;
+    direction: rtl;
+}
+
+/* Fix for icons in buttons (from dt-framework.css) */
+button svg, .dt-sc-btn svg {
+    margin-right: 0 !important;
+    margin-left: 5px !important;
+}
+
+/* Ensure navbar aligns correctly */
+.navbar-nav {
+    padding-right: 0;
+}
+
+.navbar-brand {
+    margin-right: 0;
+    margin-left: 1rem;
+}
+
+/* Fix Bootstrap icons spacing if used */
+.bi {
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+/* Custom Utilities for RTL */
+.text-end-rtl {
+    text-align: left !important;
+}
+
+/* Flip margins for spacing utilities if not handled by Bootstrap RTL automatically in some contexts */
+.me-2 {
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
+}
+
+.ms-auto {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+
+/* Carousel Indicators/Controls */
+.carousel-control-prev {
+    left: auto;
+    right: 0;
+}
+
+.carousel-control-next {
+    right: auto;
+    left: 0;
+}
+
+/* Transform rotation for directional icons if needed */
+.fa-arrow-right {
+    transform: rotate(180deg);
+}
+
+.fa-chevron-right {
+    transform: rotate(180deg);
+}
+
+/* Fix Guarantee Icon spacing */
+.d-flex.align-items-center img {
+    margin-right: 0 !important;
+    margin-left: 15px !important;
+}

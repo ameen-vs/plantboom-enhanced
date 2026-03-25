@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج - PlantBoom</title>
+    <meta name="description" content="تفاصيل المنتج وأسعار الكميات">
+
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="./assets/lib/dt-framework.css">
+    <link rel="stylesheet" href="./assets/lib/dt-custom.css">
+    <link rel="stylesheet" href="./assets/lib/font-all.min.css">
+
+    <!-- Enhanced Custom Styles -->
+    <link rel="stylesheet" href="enhanced-styles.css?v=2">
+
+    <!-- Arabic Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        .product-detail-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 80px;
+            padding-right: 50px;
+            padding-left: 50px;
+        }
+
+        .product-detail-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            padding: 40px;
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.15);
+        }
+
+        .product-info-column {
+            margin-right: -19rem;
+            z-index: 1;
+        }
+
+        .product-main-image {
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            max-width: 47.5%;
+            height: auto;
+            display: block;
+            margin-right: 2rem;
+            margin-left: auto;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-selector {
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+
+        .quantity-selector:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
+        }
+
+        .quantity-selector.selected {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--primary-green);
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.25);
+        }
+
+        .quantity-option {
+            cursor: pointer;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .quantity-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-right: 50px;
+        }
+
+        .quantity-unit {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .total-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .delivery-note {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-add-to-cart {
+            background: white;
+            color: var(--primary-green);
+            border: none;
+            padding: 18px 40px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            min-height: 48px;
+        }
+
+        .btn-add-to-cart:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: #f0fdf4;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .info-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            flex-shrink: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .info-item:hover .info-icon {
+            transform: scale(1.1) rotate(10deg);
+            background: #059669;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+        }
+
+        .info-icon i {
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .product-info-section {
+            position: relative;
+            background: transparent;
+            border-radius: 30px;
+            padding: 50px 40px;
+            margin-top: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .video-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .video-bg-element {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%);
+        }
+
+        @media (max-width: 991.98px) {
+            .product-detail-section {
+                padding-right: 16px;
+                padding-left: 16px;
+                padding-top: 90px;
+                padding-bottom: 60px;
+            }
+
+            .product-detail-card {
+                padding: 24px 18px;
+            }
+
+            .product-main-image {
+                max-width: 100%;
+                margin-right: 0;
+                margin-left: 0;
+                margin-bottom: 24px;
+            }
+
+            .product-info-column {
+                margin-right: 0;
+                margin-top: 0;
+            }
+
+            .product-info-section {
+                padding: 32px 20px;
+                margin-top: 32px;
+            }
+
+            .total-section {
+                padding: 22px 18px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .quantity-option {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .quantity-price {
+                margin-right: 0;
+                text-align: right;
+            }
+
+            .btn-add-to-cart {
+                padding: 16px 20px;
+            }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(-5px);
+        }
+
+        .cart-notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--primary-green);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .cart-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+                <svg width="45" height="45" viewBox="0 0 100 100" class="me-2" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 85 C30 85 10 60 10 30 C10 10 40 0 50 25 C60 0 90 10 90 30 C90 60 70 85 50 85 Z"
+                        fill="#10b981" />
+                    <path d="M50 85 C60 85 90 60 90 30 C90 10 60 0 50 25" fill="#059669" opacity="0.8" />
+                </svg>
+                <span class="brand-text">PlantBoom</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html#home">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#benefits">المزايا</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="index.html#products">المنتجات</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#testimonials">الآراء</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">اتصل بنا</a></li>
+                </ul>
+                <div class="navbar-actions d-flex align-items-center gap-3">
+                    <button class="btn btn-sm cart-glass-btn" aria-label="عربة التسوق" onclick="viewCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="badge bg-danger" style="display: none;">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Notification -->
+    <div id="cart-notification" class="cart-notification">
+        <i class="fas fa-check-circle me-2"></i>
+        <span>تمت الإضافة إلى السلة بنجاح!</span>
+    </div>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail-section">
+        <div class="container">
+            <a href="index.html#products" class="back-link">
+                <i class="fas fa-arrow-right"></i>
+                العودة للمنتجات
+            </a>
+
+            <div class="product-detail-card">
+                <div class="row g-4">
+                    <!-- Product Image -->
+                    <div class="col-lg-5">
+                        <img id="product-image" src="" alt="صورة المنتج" class="product-main-image">
+                    </div>
+
+                    <!-- Product Information -->
+                    <div class="col-lg-6 product-info-column">
+                        <span class="badge bg-danger mb-2">الأكثر مبيعاً 🔥</span>
+                        <h1 id="product-name" class="h2 fw-bold mb-2">ايكو كومبوست</h1>
+
+                        <div class="rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <span class="ms-2 text-muted small">(2,847 تقييم)</span>
+                        </div>
+
+                        <p id="product-description" class="mb-3 text-muted">
+                            اكتشف قوة الطبيعة مع جرين بوستر! منتجنا الثوري المصنوع من مكونات عضوية 100%
+                            يضاعف سرعة نمو نباتاتك ويعزز صحتها وحيويتها بشكل ملحوظ.
+                        </p>
+
+                        <!-- Quantity Selection -->
+                        <h3 class="h5 fw-bold mb-3">اختر الكمية:</h3>
+                        <div id="quantity-options"></div>
+
+                        <!-- Total Section -->
+                        <div class="total-section p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="h6 mb-0">المجموع (بدون التوصيل):</span>
+                                <div class="total-amount h2 mb-0" id="total-price">0 درهم</div>
+                            </div>
+
+                            <div class="delivery-note">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <small>سيتم إضافة تكلفة التوصيل حسب موقعك عند إتمام الطلب</small>
+                            </div>
+
+                            <button class="btn-add-to-cart" onclick="addToCart()">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                أضف إلى السلة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info Section -->
+                <div class="product-info-section" id="product-info-viz">
+                    <div class="video-bg-container">
+                        <video id="info-video-bg" muted loop playsinline class="video-bg-element">
+                            <source src="./assets/video/compost-bg.mp4" type="video/mp4">
+                        </video>
+                        <div class="video-overlay-gradient"></div>
+                    </div>
+
+                    <h3 class="h3 fw-bold mb-4 text-white">معلومات المنتج</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-white">مكونات طبيعية 100%</h5>
+                                    <p class="mb-0 text-white-50">مصنوع من مواد عضوية آمنة وصديقة للبيئة</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-white">ضمان الجودة</h5>
+                                    <p class="mb-0 text-white-50">نتائج مضمونة أو استرداد كامل للمبلغ</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-white">توصيل سريع</h5>
+                                    <p class="mb-0 text-white-50">توصيل لجميع المدن في 24-48 ساعة</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-white">سهل الاستخدام</h5>
+                                    <p class="mb-0 text-white-50">تعليمات واضحة ونتائج سريعة</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Product data
+        const products = {
+            '1': {
+                name: 'ايكو كومبوست',
+                image: './assets/images/eco-compost-2.png',
+                description: 'منتج ايكو كومبوست الأصلي بحجم 10 كجم - مثالي للمزارع الصغيرة والحدائق المنزلية. نتائج مذهلة في أسبوع واحد!',
+                quantities: [
+                    { amount: 1, price: 135, unit: 'كيس واحد (10 كجم)' },
+                    { amount: 2, price: 185, unit: 'كيسين (20 كجم)' }
+                ]
+            },
+            '2': {
+                name: 'جرين بوستر بريميوم',
+                image: './assets/images/eco-tourbe-1.png',
+                description: 'النسخة المطورة من جرين بوستر بتركيبة محسّنة وأكثر تركيزاً. نتائج أسرع وأقوى لنباتات استثنائية!',
+                quantities: [
+                    { amount: 1, price: 399, unit: 'عبوة واحدة (5 كجم)' },
+                    { amount: 2, price: 749, unit: 'عبوتين (10 كجم)' }
+                ]
+            },
+            '3': {
+                name: 'جرين بوستر منزلي',
+                image: './assets/images/triple-20.png',
+                description: 'مخصص للنباتات المنزلية والزينة. تركيبة خاصة لنباتات الأصص والشرفات مع نتائج سريعة وآمنة.',
+                quantities: [
+                    { amount: 1, price: 149, unit: 'عبوة صغيرة (1 كجم)' },
+                    { amount: 2, price: 279, unit: 'عبوتين (2 كجم)' }
+                ]
+            },
+            '4': {
+                name: 'جرين بوستر للحدائق',
+                image: './assets/images/graines.png',
+                description: 'حجم عائلي كبير مثالي للحدائق والمساحات الواسعة. اقتصادي وفعال لجميع أنواع النباتات الخارجية.',
+                quantities: [
+                    { amount: 1, price: 499, unit: 'كيس كبير (25 كجم)' },
+                    { amount: 2, price: 949, unit: 'كيسين (50 كجم)' }
+                ]
+            }
+        };
+
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id') || '1';
+        const product = products[productId];
+
+        let selectedQuantity = null;
+
+        // Initialize page
+        window.onload = function () {
+            if (product) {
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('product-image').src = product.image;
+                document.getElementById('product-description').textContent = product.description;
+
+                // Render quantity options
+                const quantityContainer = document.getElementById('quantity-options');
+                product.quantities.forEach((qty, index) => {
+                    const discount = qty.amount > 1 ? Math.round((1 - (qty.price / (qty.amount * product.quantities[0].price))) * 100) : 0;
+
+                    const optionHTML = `
+                        <div class="quantity-selector ${index === 0 ? 'selected' : ''}" onclick="selectQuantity(${index})">
+                            <div class="quantity-option">
+                                <div>
+                                    <div class="quantity-label">${qty.amount}x - ${qty.unit}</div>
+                                    ${discount > 0 ? `<span class="badge bg-success">توفير ${discount}%</span>` : ''}
+                                </div>
+                                <div>
+                                    <div class="quantity-price">${qty.price} درهم</div>
+                                    ${qty.amount > 1 ? `<div class="quantity-unit">${Math.round(qty.price / qty.amount)} درهم لكل وحدة</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    quantityContainer.innerHTML += optionHTML;
+                });
+
+                // Select first option by default
+                selectQuantity(0);
+            }
+
+            // Update cart count
+            updateCartCount();
+        };
+
+        function selectQuantity(index) {
+            selectedQuantity = product.quantities[index];
+
+            // Update UI
+            document.querySelectorAll('.quantity-selector').forEach((el, i) => {
+                if (i === index) {
+                    el.classList.add('selected');
+                } else {
+                    el.classList.remove('selected');
+                }
+            });
+
+            // Update total price
+            document.getElementById('total-price').textContent = selectedQuantity.price + ' درهم';
+        }
+
+        function addToCart() {
+            if (!selectedQuantity) return;
+
+            // Get existing cart
+            let cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+
+            // Add item to cart
+            const cartItem = {
+                productId: productId,
+                productName: product.name,
+                quantity: selectedQuantity.amount,
+                unit: selectedQuantity.unit,
+                price: selectedQuantity.price,
+                image: product.image
+            };
+
+            cart.push(cartItem);
+            localStorage.setItem('plantboom_cart', JSON.stringify(cart));
+
+            // Show notification
+            const notification = document.getElementById('cart-notification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+
+            // Update cart count
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+            const countBadge = document.getElementById('cart-count');
+            if (cart.length > 0) {
+                countBadge.textContent = cart.length;
+                countBadge.style.display = 'inline-block';
+            } else {
+                countBadge.style.display = 'none';
+            }
+        }
+
+        function viewCart() {
+            window.location.href = 'cart.html';
+        }
+
+        // Performance Optimization: Video Play on Scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = document.getElementById('info-video-bg');
+                if (video) {
+                    if (entry.isIntersecting) {
+                        video.play().catch(e => console.log("Video play failed:", e));
+                    } else {
+                        video.pause();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        const target = document.getElementById('product-info-viz');
+        if (target) {
+            videoObserver.observe(target);
+        }
+    </script>
+</body>
+
+</html>

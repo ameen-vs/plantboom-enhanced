@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بلانت بوم - معجزة النمو | GreenBooster</title>
+    <meta name="description" content="اكتشف جرين بوستر - الحل الطبيعي لتسريع نمو النباتات وتعزيز حيوية محاصيلك">
+
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="./assets/lib/dt-framework.css">
+    <link rel="stylesheet" href="./assets/lib/dt-custom.css">
+    <link rel="stylesheet" href="./assets/lib/slick.css">
+    <link rel="stylesheet" href="./assets/lib/font-all.min.css">
+    <link rel="stylesheet" href="./assets/lib/swiper-bundle.min.css">
+    <link rel="stylesheet" href="./assets/lib/animation.css">
+
+    <!-- Enhanced Custom Styles -->
+    <link rel="stylesheet" href="enhanced-styles.css?v=2">
+
+    <!-- Molhim Arabic Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Spline 3D Script -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.48/build/spline-viewer.js"></script>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.51/build/spline-viewer.js"></script>
+
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top" role="navigation"
+        aria-label="التنقل الرئيسي">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#home">
+                <svg width="45" height="45" viewBox="0 0 100 100" class="me-2" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 85 C30 85 10 60 10 30 C10 10 40 0 50 25 C60 0 90 10 90 30 C90 60 70 85 50 85 Z"
+                        fill="#10b981" />
+                    <path d="M50 85 C60 85 90 60 90 30 C90 10 60 0 50 25" fill="#059669" opacity="0.8" />
+                    <path d="M50 85 Q30 55 30 30" stroke="white" stroke-width="2" fill="none" opacity="0.5" />
+                </svg>
+                <span class="brand-text">PlantBoom</span>
+            </a>
+            <div class="navbar-right-actions d-flex align-items-center gap-2">
+                <div class="navbar-cart-slot"></div>
+                <button class="navbar-toggler" type="button" aria-label="تبديل قائمة التنقل" aria-controls="navbarNav"
+                    aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#benefits">المزايا</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#products">المنتجات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#testimonials">الآراء</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">اتصل بنا</a></li>
+                </ul>
+                <div class="navbar-actions d-flex align-items-center gap-3">
+                    <div class="header-search-bar">
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        <input type="text" class="search-input" placeholder="أدخل مصطلحات البحث"
+                            aria-label="بحث في المنتجات والمحتوى">
+                    </div>
+                    <button class="btn btn-sm cart-glass-btn" aria-label="عربة التسوق"
+                        onclick="window.location.href='cart.html'">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count-badge" class="badge bg-danger"
+                            style="display: none; position: absolute; top: -5px; right: -5px; font-size: 0.7rem;">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section - Fullscreen Video + Parallax + Glass Card -->
+    <header class="hero-section" id="home">
+        <!-- Video Background Layer (parallax - moves slower) -->
+        <div class="hero-video-wrap" data-parallax="0.4">
+            <video class="hero-video-bg" id="heroVideoBg" muted loop playsinline preload="auto" autoplay>
+            </video>
+            <div class="hero-video-overlay"></div>
+        </div>
+
+        <!-- Noise Grain Layer (Removed to show natural video) -->
+
+        <!-- Content Layer (parallax - moves faster) -->
+        <div class="hero-content-wrap" data-parallax="1">
+            <div class="container-fluid h-100 px-lg-5">
+                <div class="row align-items-center justify-content-start h-100">
+                    <div class="col-lg-7 col-md-9 hero-card-col pe-lg-5">
+                        <!-- Floating Glass UI Card -->
+                        <div class="hero-glass-card" data-mouse-parallax>
+                            <div class="hero-card-inner">
+                                <!-- Root-growing text reveal -->
+                                <h1 class="hero-title mask-reveal">
+                                    <span class="mask-line">نُعيد الحياة للتربة</span>
+                                </h1>
+                                <p class="hero-subtitle mask-reveal mask-delay-1">
+                                    حلول عضوية ذكية لنمو نباتات أقوى
+                                </p>
+                                <p class="hero-tags mask-reveal mask-delay-2">
+                                    أسمدة حيوية – كمبوست معالج – تحسين التربة
+                                </p>
+                                <div class="d-flex align-items-center gap-3">
+                                    <a href="#products" class="hero-cta mask-reveal mask-delay-3">
+                                        <i class="fas fa-seedling ms-2"></i>
+                                        ابدأ الزراعة
+                                    </a>
+                                    <a href="#contact" class="hero-cta-secondary mask-reveal mask-delay-3">
+                                        <i class="fas fa-envelope ms-2"></i>
+                                        تواصل معنا
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Benefits Section with Video Background -->
+    <section class="benefits-section-spline" id="benefits">
+        <!-- Video Background Container -->
+        <div class="video-bg-container">
+            <video id="benefitsVideoBg" class="video-bg-element" muted loop playsinline preload="metadata">
+            </video>
+            <div class="video-overlay-gradient"></div>
+        </div>
+
+        <!-- Content Overlay -->
+        <div class="benefits-content-overlay">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="benefit-card-glass">
+                            <div class="benefit-icon-glass">
+                                <i class="fas fa-rocket fa-2x"></i>
+                            </div>
+                            <h4>نمو سريع</h4>
+                            <p>يسرع نمو النباتات حتى 200% مقارنة بالطرق التقليدية</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="benefit-card-glass">
+                            <div class="benefit-icon-glass">
+                                <i class="fas fa-shield-alt fa-2x"></i>
+                            </div>
+                            <h4>حماية طبيعية</h4>
+                            <p>يقوي مناعة النباتات ويحميها من الأمراض والآفات</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="benefit-card-glass">
+                            <div class="benefit-icon-glass">
+                                <i class="fas fa-leaf fa-2x"></i>
+                            </div>
+                            <h4>100% طبيعي</h4>
+                            <p>مكونات عضوية بالكامل وآمنة للبيئة</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="benefit-card-glass">
+                            <div class="benefit-icon-glass">
+                                <i class="fas fa-tint fa-2x"></i>
+                            </div>
+                            <h4>توفير المياه</h4>
+                            <p>يحسن امتصاص الماء ويقلل الحاجة للري المتكرر</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="benefit-card-glass">
+                            <div class="benefit-icon-glass">
+                                <i class="fas fa-chart-line fa-2x"></i>
+                            </div>
+                            <h4>إنتاجية أعلى</h4>
+                            <p>زيادة ملحوظة في حجم وجودة المحصول</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="benefit-card-glass">
+                            <div class="benefit-icon-glass">
+                                <i class="fas fa-money-bill-wave fa-2x"></i>
+                            </div>
+                            <h4>موفر اقتصادياً</h4>
+                            <p>استثمار واحد يدوم طويلاً بنتائج مضمونة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Section - New Glass Morphism Grid -->
+    <section class="product-section-new py-5" id="products">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge bg-success mb-2">منتجاتنا</span>
+                <h2 class="display-5 fw-bold mb-3">اكتشف مجموعتنا</h2>
+                <p class="lead text-muted">منتجات طبيعية عالية الجودة لنباتاتك</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Product 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="product-glass-card">
+                        <div class="product-image-wrapper">
+                            <img src="./assets/images/eco-compost-1.png" alt="Eco Compost 1" class="product-image">
+                        </div>
+                        <div class="product-card-content">
+                            <h4 class="product-title">جرين بوستر 10 كجم</h4>
+                            <a href="product-detail.html?id=1" class="btn btn-product-view">
+                                <i class="fas fa-eye ms-2"></i>
+                                عرض المزيد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="product-glass-card">
+                        <div class="product-image-wrapper">
+                            <img src="./assets/images/eco-tourbe-1.png" alt="Eco Tourbe 1" class="product-image">
+                        </div>
+                        <div class="product-card-content">
+                            <h4 class="product-title">جرين بوستر بريميوم</h4>
+                            <a href="product-detail.html?id=2" class="btn btn-product-view">
+                                <i class="fas fa-eye ms-2"></i>
+                                عرض المزيد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="product-glass-card">
+                        <div class="product-image-wrapper">
+                            <img src="./assets/images/triple-20.png" alt="Triple 20" class="product-image">
+                        </div>
+                        <div class="product-card-content">
+                            <h4 class="product-title">جرين بوستر منزلي</h4>
+                            <a href="product-detail.html?id=3" class="btn btn-product-view">
+                                <i class="fas fa-eye ms-2"></i>
+                                عرض المزيد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="product-glass-card">
+                        <div class="product-image-wrapper">
+                            <img src="./assets/images/graines.png" alt="Graines" class="product-image">
+                        </div>
+                        <div class="product-card-content">
+                            <h4 class="product-title">جرين بوستر للحدائق</h4>
+                            <a href="product-detail.html?id=4" class="btn btn-product-view">
+                                <i class="fas fa-eye ms-2"></i>
+                                عرض المزيد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section - Vanilla JS (no React dependency) -->
+    <section class="testimonials-section" id="testimonials">
+        <!-- Mouse-reactive glow follower -->
+        <div class="testimonials-mouse-glow" id="testimonialsGlow"></div>
+
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge bg-success mb-2">شهادات العملاء</span>
+                <h2 class="display-5 fw-bold mb-3">ماذا يقول عملاؤنا</h2>
+                <p class="lead text-muted">آراء حقيقية من مستخدمين راضين</p>
+            </div>
+
+            <div class="testimonials-carousel" id="testimonialsCarousel">
+                <div class="row g-4 justify-content-center" id="testimonialsRow"></div>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Engine (vanilla JS) -->
+    <script>
+        (function () {
+            'use strict';
+
+            /* ---- Data ---- */
+            var testimonials = [
+                { id: 1, name: 'أحمد المنصوري', role: 'مزارع', avatar: 'أ', rating: 5, text: 'منتج رائع جداً! استخدمته في حديقتي المنزلية وشاهدت نتائج مذهلة خلال أسبوعين فقط. النباتات أصبحت أكثر خضرة وحيوية.', location: 'الرباط، المغرب' },
+                { id: 2, name: 'فاطمة الزهراء', role: 'صاحبة مشتل', avatar: 'ف', rating: 5, text: 'كمتخصصة في النباتات، أنصح به بشدة. جودة ممتازة وسعر مناسب. عملائي سعداء جداً بالنتائج.', location: 'الدار البيضاء، المغرب' },
+                { id: 3, name: 'كريم بنعلي', role: 'مهندس زراعي', avatar: 'ك', rating: 5, text: 'منتج طبيعي 100% وفعال جداً. استخدمته في مشروعي الزراعي وحققت زيادة في الإنتاجية بنسبة 180%.', location: 'مراكش، المغرب' },
+                { id: 4, name: 'سلمى القاسمي', role: 'هاوية زراعة', avatar: 'س', rating: 5, text: 'أفضل منتج جربته لنباتاتي المنزلية. سهل الاستخدام ونتائجه واضحة من أول استعمال. شكراً PlantBoom!', location: 'فاس، المغرب' },
+                { id: 5, name: 'يوسف الإدريسي', role: 'مالك مزرعة', avatar: 'ي', rating: 5, text: 'استثمار رائع! وفرت الكثير من المال والوقت. محصولي أصبح أكثر جودة وكمية. أنصح به كل المزارعين.', location: 'طنجة، المغرب' },
+                { id: 6, name: 'نادية بنخليفة', role: 'مصممة حدائق', avatar: 'ن', rating: 5, text: 'استخدمه في جميع مشاريعي. النتائج دائماً مبهرة والعملاء راضون. منتج يستحق الثقة.', location: 'أكادير، المغرب' }
+            ];
+
+            var perPage = 3;
+            var currentPage = 0;
+            var totalPages = Math.ceil(testimonials.length / perPage);
+            var isPaused = false;
+            var autoTimer = null;
+            var isInView = false;
+
+            var row = document.getElementById('testimonialsRow');
+            var dotsWrap = document.getElementById('carouselDots');
+            var section = document.getElementById('testimonials');
+            var glow = document.getElementById('testimonialsGlow');
+
+            /* ---- Build a single card HTML ---- */
+            function cardHTML(t) {
+                var stars = '';
+                for (var i = 0; i < 5; i++) {
+                    var filled = i < t.rating;
+                    stars += '<i class="fas fa-star star-3d" data-star-index="' + i + '" data-filled="' + filled + '"></i>';
+                }
+                return '' +
+                    '<div class="testimonial-card" data-card>' +
+                    '  <div class="testimonial-header">' +
+                    '    <div class="testimonial-avatar">' + t.avatar + '</div>' +
+                    '    <div>' +
+                    '      <h5 class="mb-0">' + t.name + '</h5>' +
+                    '      <small class="text-muted">' + t.role + '</small>' +
+                    '    </div>' +
+                    '  </div>' +
+                    '  <div class="testimonial-rating mb-2">' + stars + '</div>' +
+                    '  <p class="testimonial-text">"' + t.text + '"</p>' +
+                    '  <div class="d-flex align-items-center text-muted testimonial-location">' +
+                    '    <i class="fas fa-map-marker-alt ms-2"></i>' +
+                    '    <small>' + t.location + '</small>' +
+                    '  </div>' +
+                    '</div>';
+            }
+
+            /* ---- Render current page ---- */
+            function renderPage() {
+                var start = currentPage * perPage;
+                var slice = testimonials.slice(start, start + perPage);
+                var html = '';
+                slice.forEach(function (t) {
+                    html += '<div class="col-lg-4 col-md-6">' + cardHTML(t) + '</div>';
+                });
+                row.innerHTML = html;
+
+                // Update dots
+                var dots = dotsWrap.querySelectorAll('.dot');
+                dots.forEach(function (d, i) {
+                    d.classList.toggle('active', i === currentPage);
+                });
+
+                // Trigger animations if section is in view
+                if (isInView) {
+                    requestAnimationFrame(function () { triggerPopIn(); });
+                }
+            }
+
+            /* ---- Build dots ---- */
+            function buildDots() {
+                var html = '';
+                for (var i = 0; i < totalPages; i++) {
+                    html += '<button type="button" class="dot' + (i === 0 ? ' active' : '') + '" data-page="' + i + '" aria-label="عرض الشهادات ' + (i + 1) + '"><span class="dot-label">' + (i + 1) + '</span></button>';
+                }
+                dotsWrap.innerHTML = html;
+                dotsWrap.querySelectorAll('.dot').forEach(function (d) {
+                    d.addEventListener('click', function () {
+                        currentPage = parseInt(d.getAttribute('data-page'));
+                        renderPage();
+                        resetAutoTimer();
+                    });
+                });
+            }
+
+            /* ---- Pop-in / Pop-out ---- */
+            function triggerPopIn() {
+                var cards = row.querySelectorAll('[data-card]');
+                cards.forEach(function (card, index) {
+                    card.classList.remove('pop-in', 'pop-out');
+                    card.style.animationDelay = (index * 150) + 'ms';
+                    // Force reflow
+                    void card.offsetWidth;
+                    card.classList.add('pop-in');
+
+                    // Pause auto-rotate on hover
+                    card.addEventListener('mouseenter', function () { isPaused = true; });
+                    card.addEventListener('mouseleave', function () { isPaused = false; });
+                });
+
+                // Trigger 3D star animations after card pop-in
+                setTimeout(function () { animateStars(); }, 300);
+            }
+
+            function triggerPopOut() {
+                var cards = row.querySelectorAll('[data-card]');
+                cards.forEach(function (card) {
+                    card.classList.remove('pop-in');
+                    card.classList.add('pop-out');
+                });
+            }
+
+            /* ---- 3D Star Animations ---- */
+            function animateStars() {
+                var cards = row.querySelectorAll('[data-card]');
+                cards.forEach(function (card, cardIdx) {
+                    var stars = card.querySelectorAll('.star-3d');
+                    stars.forEach(function (star, starIdx) {
+                        var filled = star.getAttribute('data-filled') === 'true';
+                        if (!filled) return;
+
+                        star.classList.remove('star-flip', 'star-idle');
+                        star.style.animationDelay = '';
+                        void star.offsetWidth;
+
+                        var delay = (cardIdx * 200) + (starIdx * 120);
+                        star.style.animationDelay = delay + 'ms';
+                        star.classList.add('star-flip');
+
+                        // After flip, switch to idle float
+                        var flipDuration = 600 + delay;
+                        setTimeout(function () {
+                            star.classList.remove('star-flip');
+                            star.style.animationDelay = (starIdx * 200) + 'ms';
+                            star.classList.add('star-idle');
+                        }, flipDuration);
+                    });
+                });
+            }
+
+            function resetStars() {
+                var stars = row.querySelectorAll('.star-3d');
+                stars.forEach(function (star) {
+                    star.classList.remove('star-flip', 'star-idle');
+                    star.style.animationDelay = '';
+                });
+            }
+
+            /* ---- Auto-rotate ---- */
+            function startAutoTimer() {
+                autoTimer = setInterval(function () {
+                    if (isPaused || !isInView) return;
+                    currentPage = (currentPage + 1) % totalPages;
+                    renderPage();
+                }, 5000);
+            }
+
+            function resetAutoTimer() {
+                clearInterval(autoTimer);
+                startAutoTimer();
+            }
+
+            /* ---- Mouse-reactive glow ---- */
+            if (section && glow) {
+                section.addEventListener('mousemove', function (e) {
+                    var rect = section.getBoundingClientRect();
+                    glow.style.left = (e.clientX - rect.left) + 'px';
+                    glow.style.top = (e.clientY - rect.top) + 'px';
+                });
+            }
+
+            /* ---- Scroll-triggered observer (replays on every entry) ---- */
+            if (section && typeof IntersectionObserver !== 'undefined') {
+                var observer = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            isInView = true;
+                            triggerPopIn();
+                        } else {
+                            isInView = false;
+                            triggerPopOut();
+                            resetStars();
+                        }
+                    });
+                }, { threshold: 0.15 });
+                observer.observe(section);
+            } else {
+                isInView = true;
+            }
+
+            /* ---- Init ---- */
+            buildDots();
+            renderPage();
+            startAutoTimer();
+        })();
+    </script>
+
+    <!-- Contact Section — Glassmorphism + 3D Liquid Glass -->
+    <section class="contact-glass-section" id="contact">
+        <!-- Micro-grain noise overlay -->
+        <div class="contact-noise" aria-hidden="true"></div>
+        <!-- Mouse-follow blob -->
+        <div class="contact-blob" id="contactBlob" aria-hidden="true"></div>
+
+        <div class="container">
+            <!-- Section header -->
+            <div class="text-center mb-5">
+                <span class="contact-badge">تواصل معنا</span>
+                <h2 class="contact-section-title">نحن هنا لمساعدتك</h2>
+                <p class="contact-section-sub">أرسل لنا رسالة وسنعود إليك في أقرب وقت</p>
+            </div>
+
+            <div class="row g-4 contact-cards-row" id="contactCardsRow">
+                <!-- LEFT: Contact Form Card -->
+                <div class="col-lg-6 order-1 order-lg-1">
+                    <div class="contact-glass-card contact-form-card" data-contact-parallax>
+                        <div class="glass-card-shine" aria-hidden="true"></div>
+                        <h3 class="glass-card-title">أرسل لنا رسالة</h3>
+                        <p class="glass-card-subtitle">سنرد عليك خلال 24 ساعة</p>
+
+                        <form id="contactForm" class="contact-glass-form" action="https://wa.me/c/212657275000"
+                            target="_blank" method="get" autocomplete="off">
+                            <div class="glass-input-group">
+                                <div class="glass-input-wrap">
+                                    <input type="text" id="contactName" class="glass-input" placeholder=" " required>
+                                    <label for="contactName" class="glass-label">الاسم الكامل</label>
+                                    <div class="glass-input-glow"></div>
+                                </div>
+                            </div>
+                            <div class="glass-input-group">
+                                <div class="glass-input-wrap">
+                                    <input type="email" id="contactEmail" class="glass-input" placeholder=" " required>
+                                    <label for="contactEmail" class="glass-label">البريد الإلكتروني</label>
+                                    <div class="glass-input-glow"></div>
+                                </div>
+                            </div>
+                            <div class="glass-input-group">
+                                <div class="glass-input-wrap">
+                                    <input type="tel" id="contactPhone" class="glass-input" placeholder=" " dir="ltr">
+                                    <label for="contactPhone" class="glass-label">رقم الهاتف</label>
+                                    <div class="glass-input-glow"></div>
+                                </div>
+                            </div>
+                            <div class="glass-input-group">
+                                <div class="glass-input-wrap glass-textarea-wrap">
+                                    <textarea id="contactMessage" class="glass-input glass-textarea" placeholder=" "
+                                        rows="4" required></textarea>
+                                    <label for="contactMessage" class="glass-label">رسالتك</label>
+                                    <div class="glass-input-glow"></div>
+                                </div>
+                            </div>
+                            <button type="submit" class="glass-cta-btn">
+                                <span class="glass-cta-text">
+                                    <i class="fas fa-paper-plane ms-2"></i>
+                                    إرسال الرسالة
+                                </span>
+                                <span class="glass-cta-shine" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Contact Info Card -->
+                <div class="col-lg-6 order-2 order-lg-2">
+                    <div class="contact-glass-card contact-info-card" data-contact-parallax>
+                        <div class="glass-card-shine" aria-hidden="true"></div>
+                        <h3 class="glass-card-title">تواصل معنا</h3>
+                        <p class="glass-card-subtitle">يمكنك الوصول إلينا عبر القنوات التالية</p>
+
+                        <div class="contact-info-list">
+                            <!-- Address -->
+                            <div class="contact-info-pill">
+                                <div class="info-pill-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="info-pill-content">
+                                    <span class="info-pill-label">العنوان</span>
+                                    <span class="info-pill-value">المغرب، بوفكران مكناس</span>
+                                </div>
+                            </div>
+                            <!-- Phone -->
+                            <div class="contact-info-pill">
+                                <div class="info-pill-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="info-pill-content">
+                                    <span class="info-pill-label">الهاتف</span>
+                                    <span class="info-pill-value" dir="ltr">+212 657275000</span>
+                                </div>
+                            </div>
+                            <!-- Email -->
+                            <div class="contact-info-pill">
+                                <div class="info-pill-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="info-pill-content">
+                                    <span class="info-pill-label">البريد الإلكتروني</span>
+                                    <span class="info-pill-value">btahabenhachoume@gmail.com</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Icons -->
+                        <div class="contact-social-row">
+                            <a href="https://wa.me/c/212657275000" target="_blank" class="contact-social-chip"
+                                aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="https://www.instagram.com/plamtboom?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                                target="_blank" class="contact-social-chip" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://web.facebook.com/profile.php?id=100087087848123&_rdc=1&_rdr#"
+                                target="_blank" class="contact-social-chip" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/@tahaben391" target="_blank" class="contact-social-chip"
+                                aria-label="TikTok">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section: Mouse-follow blob + card parallax + form submit -->
+    <script>
+        (function () {
+            'use strict';
+            var section = document.getElementById('contact');
+            var blob = document.getElementById('contactBlob');
+            var cardsRow = document.getElementById('contactCardsRow');
+            var contactForm = document.getElementById('contactForm');
+
+            // --- WhatsApp Form Submission ---
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (e) {
+                    e.preventDefault(); // Prevent default form action
+
+                    var name = document.getElementById('contactName').value.trim();
+                    var email = document.getElementById('contactEmail').value.trim();
+                    var phone = document.getElementById('contactPhone').value.trim();
+                    var message = document.getElementById('contactMessage').value.trim();
+
+                    // Format the message for WhatsApp
+                    var waMessage = "مرحباً PlantBoom، لـدي استفسار:\n\n" +
+                        "👤 الاسم: " + name + "\n" +
+                        "📧 البريد: " + email + "\n" +
+                        "📱 الهاتف: " + phone + "\n\n" +
+                        "💬 الرسالة:\n" + message;
+
+                    // Encode the string for URL
+                    var encodedMessage = encodeURIComponent(waMessage);
+
+                    // Destination WhatsApp number
+                    var waNumber = "212657275000";
+                    var waUrl = "https://wa.me/" + waNumber + "?text=" + encodedMessage;
+
+                    // Open WhatsApp in a new tab
+                    window.open(waUrl, '_blank');
+                });
+            }
+
+            if (!section || !blob) return;
+
+            var targetX = 0, targetY = 0;
+            var rafId = null;
+
+            // Mouse position relative to section
+            section.addEventListener('mousemove', function (e) {
+                var rect = section.getBoundingClientRect();
+                targetX = e.clientX - rect.left;
+                targetY = e.clientY - rect.top;
+
+                // Match Testimonials: Native transition via left/top
+                blob.style.left = targetX + 'px';
+                blob.style.top = targetY + 'px';
+
+                if (!rafId) rafId = requestAnimationFrame(updateCards);
+            });
+
+            section.addEventListener('mouseenter', function () {
+                blob.style.opacity = '1';
+            });
+
+            section.addEventListener('mouseleave', function () {
+                blob.style.opacity = '0';
+            });
+
+            function updateCards() {
+                if (cardsRow) {
+                    var cards = cardsRow.querySelectorAll('[data-contact-parallax]');
+                    var rect = section.getBoundingClientRect();
+                    var cx = (targetX / rect.width - 0.5) * 2;
+                    var cy = (targetY / rect.height - 0.5) * 2;
+                    cards.forEach(function (card, i) {
+                        var factor = (i === 0) ? -4 : -3;
+                        card.style.transform = 'translate3d(' + (cx * factor) + 'px,' + (cy * factor) + 'px,0)';
+                    });
+                }
+                rafId = null;
+            }
+        })();
+    </script>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark pt-5 pb-3 footer-glow">
+        <style>
+            /* Footer Glow Effect */
+            .footer-glow,
+            .footer-glow h5,
+            .footer-glow p,
+            .footer-glow a,
+            .footer-glow span {
+                color: #ffffff !important;
+                text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 15px rgba(255, 255, 255, 0.4);
+                transition: all 0.3s ease;
+                text-decoration: none;
+            }
+
+            .footer-glow a:hover {
+                text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.7);
+            }
+        </style>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <svg width="40" height="40" viewBox="0 0 100 100" class="me-2"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 85 C30 85 10 60 10 30 C10 10 40 0 50 25 C60 0 90 10 90 30 C90 60 70 85 50 85 Z"
+                                fill="#10b981" />
+                            <path d="M50 85 C60 85 90 60 90 30 C90 10 60 0 50 25" fill="#059669" opacity="0.8" />
+                        </svg>
+                        <span class="h4 mb-0 brand-text text-white">PlantBoom</span>
+                    </div>
+                    <p class="text-white">نساعدك على تحقيق أحلامك الزراعية مع منتجات طبيعية وفعالة 100%</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3 text-white">روابط سريعة</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#home" class="text-white">الرئيسية</a></li>
+                        <li><a href="#benefits" class="text-white">المزايا</a></li>
+                        <li><a href="#products" class="text-white">المنتجات</a></li>
+                        <li><a href="#contact" class="text-white">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3 text-white">معلومات</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#" class="text-white">من نحن</a></li>
+                        <li><a href="#" class="text-white">سياسة الخصوصية</a></li>
+                        <li><a href="#" class="text-white">الشروط والأحكام</a></li>
+                        <li><a href="#" class="text-white">سياسة الإرجاع</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+            <div class="text-center">
+                <p class="mb-0 text-white">&copy; 2024 PlantBoom. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="./assets/lib/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/lib/slick.min.js"></script>
+    <script src="./assets/lib/wow.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var nav = document.querySelector('.navbar');
+            var toggle = document.querySelector('.navbar-toggler');
+            var navCollapseEl = document.getElementById('navbarNav');
+            var cartBtn = document.querySelector('.cart-glass-btn');
+            var desktopActions = document.querySelector('.navbar-actions');
+            var mobileCartSlot = document.querySelector('.navbar-cart-slot');
+
+            if (!nav || !toggle || !navCollapseEl) {
+                return;
+            }
+
+            if (typeof bootstrap === 'undefined') {
+                return;
+            }
+
+            var navCollapse = bootstrap.Collapse.getOrCreateInstance(navCollapseEl, { toggle: false });
+
+            function isOpen() {
+                return navCollapseEl.classList.contains('show');
+            }
+
+            function closeMenu() {
+                if (!isOpen()) {
+                    return;
+                }
+                navCollapse.hide();
+            }
+
+            function handleOutside(event) {
+                if (!nav.contains(event.target)) {
+                    closeMenu();
+                }
+            }
+
+            document.addEventListener('click', handleOutside);
+            document.addEventListener('touchstart', handleOutside);
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeMenu();
+                    toggle.focus();
+                }
+            });
+
+            navCollapseEl.addEventListener('shown.bs.collapse', function () {
+                toggle.classList.add('is-active');
+                toggle.setAttribute('aria-expanded', 'true');
+            });
+
+            navCollapseEl.addEventListener('hidden.bs.collapse', function () {
+                toggle.classList.remove('is-active');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+
+            var navLinks = navCollapseEl.querySelectorAll('.nav-link');
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    closeMenu();
+                });
+            });
+
+            function placeCart() {
+                if (!cartBtn || !desktopActions || !mobileCartSlot) {
+                    return;
+                }
+                if (window.innerWidth < 992) {
+                    if (cartBtn.parentNode !== mobileCartSlot) {
+                        mobileCartSlot.appendChild(cartBtn);
+                    }
+                } else {
+                    if (cartBtn.parentNode !== desktopActions) {
+                        desktopActions.appendChild(cartBtn);
+                    }
+                }
+            }
+
+            placeCart();
+            window.addEventListener('resize', placeCart);
+            window.addEventListener('orientationchange', placeCart);
+        });
+    </script>
+
+    <!-- React Components -->
+    <script type="text/babel" src="react-components.jsx"></script>
+
+    <!-- Cache Buster: 2026-02-08 -->
+
+    <!-- Hero Section: Parallax, Mask Reveal, Video -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Root-growing mask reveal (text appears like growing roots) ---
+            const maskEls = document.querySelectorAll('.mask-reveal');
+            const runReveal = () => {
+                maskEls.forEach(el => el.classList.add('mask-visible'));
+            };
+            if (document.readyState === 'complete') {
+                setTimeout(runReveal, 400);
+            } else {
+                window.addEventListener('load', () => setTimeout(runReveal, 400));
+            }
+
+            // --- Hero video: swap source for mobile and autoplay ---
+            const heroVideo = document.getElementById('heroVideoBg');
+            if (heroVideo) {
+                const mobileSrc = './assets/video/hero-bg-mobile.mp4';
+                const desktopSrc = './assets/video/hero-bg.mp4';
+
+                function setHeroVideoSrc() {
+                    const isMobile = window.innerWidth <= 768;
+                    const targetSrc = isMobile ? mobileSrc : desktopSrc;
+                    // Only reload if the source actually changed
+                    if (heroVideo.getAttribute('data-current-src') !== targetSrc) {
+                        heroVideo.setAttribute('data-current-src', targetSrc);
+                        heroVideo.src = targetSrc;
+                        heroVideo.load();
+                        heroVideo.play().catch(() => { });
+                    }
+                }
+
+                setHeroVideoSrc();
+                window.addEventListener('resize', setHeroVideoSrc);
+                window.addEventListener('orientationchange', setHeroVideoSrc);
+            }
+
+            // --- Scroll parallax: soil/video moves slower than text ---
+            const heroSection = document.getElementById('home');
+            const videoWrap = document.querySelector('.hero-video-wrap');
+            const contentWrap = document.querySelector('.hero-content-wrap');
+
+            const onScroll = () => {
+                if (!heroSection || !videoWrap || !contentWrap) return;
+                const rect = heroSection.getBoundingClientRect();
+                const h = rect.height;
+                if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+                const t = Math.max(0, -rect.top);
+                const progress = Math.min(1, t / (h * 0.5));
+                const videoLag = progress * 45;
+                const contentMove = progress * 15;
+
+                videoWrap.style.transform = `translate3d(0, ${videoLag}px, 0) scale(1.03)`;
+                contentWrap.style.transform = `translate3d(0, ${contentMove}px, 0)`;
+            };
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+
+            // --- Mouse parallax (slight depth on glass card) ---
+            const glassCard = document.querySelector('[data-mouse-parallax]');
+            if (glassCard) {
+                glassCard.addEventListener('mousemove', (e) => {
+                    const rect = glassCard.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    const tiltX = y * 4;
+                    const tiltY = -x * 4;
+                    glassCard.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(10px)`;
+                });
+                glassCard.addEventListener('mouseleave', () => {
+                    glassCard.style.transform = '';
+                });
+            }
+        });
+    </script>
+
+    <!-- Spline Logo Remover - Enhanced for Multiple Viewers -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // JS for Spline removal and optimization removed as hero section is cleared.
+        });
+
+        // === Video Background Intersection Observer ===
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('benefitsVideoBg');
+
+            if (video) {
+                const benefitsMobileSrc = './assets/video/benefits-bg-mobile.mp4';
+                const benefitsDesktopSrc = './assets/video/benefits-bg.mp4';
+
+                function setBenefitsVideoSrc() {
+                    const isMobile = window.innerWidth <= 768;
+                    const targetSrc = isMobile ? benefitsMobileSrc : benefitsDesktopSrc;
+                    if (video.getAttribute('data-current-src') !== targetSrc) {
+                        video.setAttribute('data-current-src', targetSrc);
+                        video.src = targetSrc;
+                        video.load();
+                    }
+                }
+
+                setBenefitsVideoSrc();
+                window.addEventListener('resize', setBenefitsVideoSrc);
+                window.addEventListener('orientationchange', setBenefitsVideoSrc);
+
+                const observerOptions = {
+                    threshold: 0.1 // Trigger when 10% visible
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            requestAnimationFrame(() => {
+                                video.play().catch(e => console.log('Autoplay prevented:', e));
+                            });
+                        } else {
+                            video.pause();
+                        }
+                    });
+                }, observerOptions);
+
+                observer.observe(video);
+            }
+        });
+
+    </script>
+
+    <!-- Cart Count Update Script -->
+    <script>
+        // Update cart count on page load
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+            const cartBadge = document.getElementById('cart-count-badge');
+            if (cartBadge && cart.length > 0) {
+                cartBadge.textContent = cart.length;
+                cartBadge.style.display = 'inline-block';
+            } else if (cartBadge) {
+                cartBadge.style.display = 'none';
+            }
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', updateCartCount);
+
+        // Update periodically
+        setInterval(updateCartCount, 1000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق - PlantBoom</title>
+
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="./assets/lib/dt-framework.css">
+    <link rel="stylesheet" href="enhanced-styles.css?v=2">
+
+    <!-- Arabic Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        .cart-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 80px;
+        }
+
+        .cart-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .cart-card {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 40px;
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3);
+        }
+
+        .cart-card h1 {
+            color: white !important;
+        }
+
+        .cart-item {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .cart-item-quantity {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .btn-remove {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-remove:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .cart-summary {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            color: var(--text-dark);
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 20px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .btn-checkout {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            background: var(--primary-green-dark);
+            color: white;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(-5px);
+        }
+
+        /* Checkout Form Styles */
+        .checkout-form-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            padding: 30px;
+            margin-top: 20px;
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            animation: slideDown 0.4s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .checkout-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .checkout-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .order-summary-box {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .order-summary-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .order-summary-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .order-item-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .order-item-details {
+            flex-grow: 1;
+        }
+
+        .order-item-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .order-item-qty {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            /* Green tint */
+            border-radius: 12px;
+            background: #f8fafc !important;
+            color: #1e293b !important;
+            transition: all 0.3s ease;
+            box-shadow: -3px -3px 8px rgba(16, 185, 129, 0.3), 3px 3px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #10b981;
+            background: white !important;
+            box-shadow: -4px -4px 15px rgba(16, 185, 129, 0.6), 4px 4px 15px rgba(16, 185, 129, 0.6);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+            margin-right: 5px;
+        }
+
+        .btn-wa-submit {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-wa-submit:hover:not(:disabled) {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-wa-submit:disabled {
+            background: #a0a0a0;
+            cursor: not-allowed;
+            opacity: 0.7;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+                <svg width="45" height="45" viewBox="0 0 100 100" class="me-2" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 85 C30 85 10 60 10 30 C10 10 40 0 50 25 C60 0 90 10 90 30 C90 60 70 85 50 85 Z"
+                        fill="#10b981" />
+                    <path d="M50 85 C60 85 90 60 90 30 C90 10 60 0 50 25" fill="#059669" opacity="0.8" />
+                </svg>
+                <span class="brand-text">PlantBoom</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html#home">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#benefits">المزايا</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#products">المنتجات</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#testimonials">الآراء</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">اتصل بنا</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="container cart-container">
+            <a href="index.html#products" class="back-link">
+                <i class="fas fa-arrow-right"></i>
+                متابعة التسوق
+            </a>
+
+            <div class="cart-card">
+                <h1 class="display-5 fw-bold mb-4">سلة التسوق</h1>
+
+                <!-- Cart Items Container -->
+                <div id="cart-items"></div>
+
+                <!-- Cart Summary -->
+                <div id="cart-summary" style="display: none;">
+                    <div class="cart-summary">
+                        <h3 class="h4 mb-4">ملخص الطلب</h3>
+
+                        <div class="summary-row">
+                            <span>المجموع الفرعي:</span>
+                            <span id="subtotal">0 درهم</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>التوصيل:</span>
+                            <span class="text-secondary fw-bold">سيتم حسابه لاحقاً</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>الإجمالي:</span>
+                            <span id="total">0 درهم</span>
+                        </div>
+
+                        <button class="btn-checkout" onclick="checkout()">
+                            <i class="fas fa-credit-card me-2"></i>
+                            إتمام الطلب
+                        </button>
+
+                        <div class="text-center mt-3" style="opacity: 0.9;">
+                            <small>
+                                <i class="fas fa-shield-alt me-1"></i>
+                                الدفع عند الاستلام متاح
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkout Form Container -->
+                <div class="checkout-form-container" id="checkout-form">
+                    <h2 class="checkout-title">إتمام الطلب</h2>
+                    <p class="checkout-subtitle">أدخل معلوماتك لإرسال الطلب مباشرة عبر واتساب</p>
+
+                    <div class="order-summary-box" id="checkout-order-summary">
+                        <!-- Dynamic order items will be injected here -->
+                    </div>
+
+                    <form id="wa-checkout-form" onsubmit="submitWhatsAppOrder(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="customer-name">الاسم الكامل *</label>
+                            <input type="text" id="customer-name" class="form-control" placeholder="أدخل اسمك الكامل"
+                                required oninput="validateForm()">
+                            <div class="error-message" id="error-name">الاسم مطلوب</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="customer-phone">رقم الهاتف *</label>
+                            <input type="tel" id="customer-phone" class="form-control"
+                                placeholder="مثال: 0612345678 أو +212" dir="ltr" required oninput="validateForm()">
+                            <div class="error-message" id="error-phone">رقم الهاتف غير صالح</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="customer-city">المدينة *</label>
+                            <input type="text" id="customer-city" class="form-control" placeholder="أدخل اسم مدينتك"
+                                required oninput="validateForm()">
+                            <div class="error-message" id="error-city">المدينة مطلوبة</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="customer-notes">ملاحظات إضافية (اختياري)</label>
+                            <textarea id="customer-notes" class="form-control" rows="3"
+                                placeholder="أية ملاحظات خاصة بطلبك..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-wa-submit" id="btn-wa-submit" disabled>
+                            <span>متابعة الشراء عبر واتساب</span>
+                            <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        window.onload = function () {
+            loadCart();
+        };
+
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSummary = document.getElementById('cart-summary');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3 class="mb-3">سلة التسوق فارغة</h3>
+                        <p class="text-white mb-4" style="opacity: 0.9;">لم تقم بإضافة أي منتجات بعد</p>
+                        <a href="index.html#products" class="btn btn-success btn-lg">
+                            <i class="fas fa-shopping-bag me-2"></i>
+                            تصفح المنتجات
+                        </a>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+                return;
+            }
+
+            // Show cart items
+            let itemsHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                subtotal += item.price;
+                itemsHTML += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.productName}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.productName}</div>
+                            <div class="cart-item-quantity">${item.unit}</div>
+                        </div>
+                        <div class="cart-item-price">${item.price} درهم</div>
+                        <button class="btn-remove" onclick="removeFromCart(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            cartItemsContainer.innerHTML = itemsHTML;
+
+            // Show summary
+            cartSummary.style.display = 'block';
+            document.getElementById('subtotal').textContent = subtotal + ' درهم';
+            document.getElementById('total').textContent = subtotal + ' درهم';
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem('plantboom_cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        function checkout() {
+            // Hide the original summary checkout button and show the checkout form
+            const btnCheckout = document.querySelector('.btn-checkout');
+            if (btnCheckout) btnCheckout.style.display = 'none';
+
+            const checkoutForm = document.getElementById('checkout-form');
+            checkoutForm.style.display = 'block';
+
+            // Scroll to the checkout form smoothly
+            checkoutForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Populate the order summary in the form
+            populateCheckoutSummary();
+        }
+
+        function populateCheckoutSummary() {
+            const cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+            const summaryContainer = document.getElementById('checkout-order-summary');
+            let html = '';
+
+            cart.forEach(item => {
+                html += `
+                    <div class="order-summary-item">
+                        <img src="${item.image}" alt="${item.productName}" class="order-item-img">
+                        <div class="order-item-details">
+                            <div class="order-item-name">${item.productName}</div>
+                            <div class="order-item-qty">الكمية: ${item.unit || 1}</div>
+                        </div>
+                        <div class="order-item-price">${item.price} درهم</div>
+                    </div>
+                `;
+            });
+
+            summaryContainer.innerHTML = html;
+        }
+
+        function validateForm() {
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const city = document.getElementById('customer-city').value.trim();
+            const submitBtn = document.getElementById('btn-wa-submit');
+
+            // Clean phone string taking out spaces, minus, plus, config spaces
+            const cleanPhone = phone.replace(/[\s\-\+\(\)]/g, '');
+            // Basic validation for an allowed moroccan number format or length
+            const isPhoneValid = cleanPhone.length >= 9 && cleanPhone.length <= 14;
+
+            let isValid = true;
+
+            // Validate Name
+            if (name.length > 0 && name.length < 2) {
+                document.getElementById('error-name').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('error-name').style.display = 'none';
+                if (name.length === 0) isValid = false;
+            }
+
+            // Validate Phone
+            if (phone.length > 0 && !isPhoneValid) {
+                document.getElementById('error-phone').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('error-phone').style.display = 'none';
+                if (phone.length === 0) isValid = false;
+            }
+
+            // Validate City
+            if (city.length > 0 && city.length < 2) {
+                document.getElementById('error-city').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('error-city').style.display = 'none';
+                if (city.length === 0) isValid = false;
+            }
+
+            submitBtn.disabled = !isValid;
+        }
+
+        function submitWhatsAppOrder(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const city = document.getElementById('customer-city').value.trim();
+            const notes = document.getElementById('customer-notes').value.trim();
+
+            const cart = JSON.parse(localStorage.getItem('plantboom_cart') || '[]');
+            if (cart.length === 0) return;
+
+            let total = 0;
+            let orderDetails = '';
+
+            if (cart.length === 1) {
+                const item = cart[0];
+                total += item.price;
+                orderDetails = `• المنتج: ${item.productName}\n• الكمية: ${item.unit || 1}\n• السعر: ${item.price} درهم\n• الإجمالي: ${total} درهم`;
+            } else {
+                cart.forEach((item, idx) => {
+                    total += item.price;
+                    orderDetails += `${idx + 1}) المنتج: ${item.productName}\n   الكمية: ${item.unit || 1}\n   السعر: ${item.price} درهم\n`;
+                });
+                orderDetails += `\n• الإجمالي الكلي: ${total} درهم`;
+            }
+
+            let message = `السلام عليكم، أريد تأكيد طلبي ✅\n—\n👤 الاسم: ${name}\n📞 رقم الهاتف: ${phone}\n📍 المدينة: ${city}\n`;
+            if (notes) {
+                message += `📝 ملاحظات: ${notes}\n`;
+            }
+            message += `—\n🛒 تفاصيل الطلب:\n${orderDetails}\n—\nطريقة الدفع: الدفع عند الاستلام`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const waUrl = `https://wa.me/212657275000?text=${encodedMessage}`;
+
+            // clear cart locally if successful? Leaving that commented strictly depending on user request
+            // localStorage.removeItem('plantboom_cart');
+
+            window.location.href = waUrl;
+        }
+    </script>
+</body>
+
+</html>
