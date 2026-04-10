@@ -19,6 +19,7 @@
         initDynamicLighting();
         initHeroTilt();
         initSearchBarInteractions();
+        initProductTabs();
 
         // Initialize WOW.js for scroll animations
         if (typeof WOW === 'function') {
@@ -488,6 +489,95 @@
         if (!input) return;
         bar.addEventListener('click', function () {
             input.focus();
+        });
+    }
+
+    function initProductTabs() {
+        const tabs = $('.product-tab');
+        const grids = $('.product-grid-container');
+        const indicator = $('.tabs-indicator');
+
+        if (!tabs.length || !grids.length) return;
+
+        function updateIndicator($tab) {
+            if (!indicator.length) return;
+            const tabWidth = $tab.outerWidth();
+            const leftPos = $tab.position().left;
+            
+            indicator.css({
+                width: tabWidth + 'px',
+                left: leftPos + 'px'
+            });
+        }
+
+        // Initialize indicator position
+        const $activeTab = tabs.filter('.active');
+        if ($activeTab.length) {
+            setTimeout(() => {
+                updateIndicator($activeTab);
+            }, 100);
+        }
+
+        // Update indicator on window resize
+        $(window).on('resize', function() {
+            const $active = $('.product-tab.active');
+            if ($active.length) {
+                indicator.css('transition', 'none');
+                updateIndicator($active);
+                setTimeout(() => {
+                    indicator.css('transition', '');
+                }, 50);
+            }
+        });
+
+        tabs.on('click', function() {
+            const $btn = $(this);
+            const targetFilter = $btn.data('filter');
+
+            if ($btn.hasClass('active')) return;
+
+            // Update UI - Tabs
+            tabs.removeClass('active');
+            $btn.addClass('active');
+
+            // Move indicator & add slosh
+            if (indicator.length) {
+                updateIndicator($btn);
+                indicator.removeClass('slosh');
+                // Force reflow to restart animation
+                void indicator[0].offsetWidth;
+                indicator.addClass('slosh');
+            }
+
+            // Switch Grids with animation
+            const $currentGrid = $('.product-grid-container.active');
+            const $nextGrid = $(`#${targetFilter}-grid`);
+
+            // Phase 1: Fade out current
+            $currentGrid.addClass('grid-fade-out');
+            
+            setTimeout(() => {
+                $currentGrid.removeClass('active grid-fade-out').addClass('d-none');
+                
+                // Phase 2: Fade in next
+                $nextGrid.removeClass('d-none').addClass('active grid-fade-in');
+                
+                // Phase 3: Stagger cards
+                const $cards = $nextGrid.find('.col-lg-3, .col-lg-4');
+                $cards.removeClass('card-stagger-in'); // Reset if needed
+                
+                $cards.each(function(index) {
+                    const $card = $(this);
+                    $card.css('animation-delay', `${index * 80}ms`);
+                    $card.addClass('card-stagger-in');
+                });
+
+                // Cleanup animation class after completion
+                setTimeout(() => {
+                    $nextGrid.removeClass('grid-fade-in');
+                }, 500);
+
+            }, 250);
         });
     }
 

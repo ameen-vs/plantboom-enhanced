@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="./assets/lib/animation.css">
 
     <!-- Enhanced Custom Styles -->
-    <link rel="stylesheet" href="enhanced-styles.css?v=2">
+    <link rel="stylesheet" href="enhanced-styles.css?v=4">
 
     <!-- Molhim Arabic Font -->
     <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
@@ -210,9 +210,20 @@
                 <span class="badge bg-success mb-2">منتجاتنا</span>
                 <h2 class="display-5 fw-bold mb-3">اكتشف مجموعتنا</h2>
                 <p class="lead text-muted">منتجات طبيعية عالية الجودة لنباتاتك</p>
+
+                <!-- Product Filter Tab Bar -->
+                <div class="product-tabs-wrapper">
+                    <div class="product-tabs-bar">
+                        <div class="tabs-indicator"></div>
+                        <button class="product-tab active" data-filter="terrain">أرض</button>
+                        <button class="product-tab" data-filter="vase">ديكور</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="row g-4">
+            <!-- Terrain Tab (Default) (Tested) -->
+            <div id="terrain-grid" class="product-grid-container active">
+                <div class="row g-4">
                 <!-- Product 1 -->
                 <div class="col-lg-3 col-md-6">
                     <div class="product-glass-card">
@@ -273,6 +284,66 @@
                                 <i class="fas fa-eye ms-2"></i>
                                 عرض المزيد
                             </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Vase Tab (Placeholder) -->
+            <div id="vase-grid" class="product-grid-container d-none">
+                <div class="row g-4 justify-content-center">
+                    <!-- Vase Product 1 -->
+                    <div class="col-lg-3 col-md-6 card-item">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <!-- VASE_PRODUCT_1_IMAGE -->
+                                <img src="./assets/images/vase_product1.jpeg" alt="مزهرية ديكور" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <!-- VASE_PRODUCT_1_NAME -->
+                                <h4 class="product-title">مزهرية ديكور 1</h4>
+                                <a href="product-detail.html?id=vase1" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vase Product 2 -->
+                    <div class="col-lg-3 col-md-6 card-item">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <!-- VASE_PRODUCT_2_IMAGE -->
+                                <img src="./assets/images/vase_product2.jpeg" alt="مزهرية ديكور" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <!-- VASE_PRODUCT_2_NAME -->
+                                <h4 class="product-title">مزهرية ديكور 2</h4>
+                                <a href="product-detail.html?id=vase2" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vase Product 3 -->
+                    <div class="col-lg-3 col-md-6 card-item">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <!-- VASE_PRODUCT_3_IMAGE -->
+                                <img src="./assets/images/vase_product3.jpeg" alt="مزهرية ديكور" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <!-- VASE_PRODUCT_3_NAME -->
+                                <h4 class="product-title">مزهرية ديكور 3</h4>
+                                <a href="product-detail.html?id=vase3" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1018,6 +1089,10 @@
         // Update periodically
         setInterval(updateCartCount, 1000);
     </script>
+
+    <!-- jQuery and Enhanced Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="enhanced-scripts.js?v=4"></script>
 </body>
 
 </html>
