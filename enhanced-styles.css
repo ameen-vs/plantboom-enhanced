@@ -47,6 +47,10 @@ html {
     scroll-behavior: smooth;
 }
 
+section[id] {
+    scroll-margin-top: calc(var(--navbar-height) + 20px);
+}
+
 .brand-text {
     font-family: 'Brush Script MT', cursive;
     font-size: 1.5rem;
@@ -703,6 +707,7 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    will-change: transform;
 }
 
 @media (max-width: 991px) {
@@ -2313,6 +2318,7 @@ html {
     background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
     min-height: 600px;
     padding: 80px 0;
+    will-change: transform;
 }
 
 .product-glass-card {
@@ -2331,6 +2337,8 @@ html {
     height: 100%;
     display: flex;
     flex-direction: column;
+    will-change: transform, opacity;
+    transform: translateZ(0);
 }
 
 .product-glass-card::before {

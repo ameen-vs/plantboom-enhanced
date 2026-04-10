@@ -14,7 +14,6 @@
         initScrollEffects();
         initContactForm();
         initNewsletterForm();
-        initSmoothScroll();
         initBackToTop();
         initDynamicLighting();
         initHeroTilt();
@@ -250,19 +249,6 @@
         }, 4000);
     }
 
-    // ========== Smooth Scroll ==========
-    function initSmoothScroll() {
-        $('a[href^="#"]').on('click', function (e) {
-            const target = $(this.getAttribute('href'));
-
-            if (target.length) {
-                e.preventDefault();
-                $('html, body').animate({
-                    scrollTop: target.offset().top - 70
-                }, 800);
-            }
-        });
-    }
 
     // ========== Back to Top Button ==========
     function initBackToTop() {
