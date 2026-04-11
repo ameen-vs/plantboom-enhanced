@@ -380,13 +380,13 @@
                     <li class="nav-item"><a class="nav-link" href="index.html#contact">اتصل بنا</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-sm cart-glass-btn" aria-label="حساب المستخدم"
-                        onclick="window.location.href='login.html'">
-                        <i class="fas fa-user"></i>
-                    </button>
                     <button class="btn btn-sm cart-glass-btn" aria-label="عربة التسوق"
                         onclick="window.location.href='cart.html'" style="display:none;">
                         <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    <button id="user-nav-btn" class="btn btn-sm cart-glass-btn" aria-label="حساب المستخدم"
+                        onclick="window.location.href='login.html'">
+                        <i class="fas fa-user"></i>
                     </button>
                 </div>
             </div>
@@ -730,6 +730,7 @@
             window.location.href = waUrl;
         }
     </script>
+    <script src="assets/js/nav-auth.js"></script>
 </body>
 
 </html>

@@ -73,15 +73,15 @@
                         <input type="text" class="search-input" placeholder="أدخل مصطلحات البحث"
                             aria-label="بحث في المنتجات والمحتوى">
                     </div>
-                    <button class="btn btn-sm cart-glass-btn" aria-label="حساب المستخدم"
-                        onclick="window.location.href='login.html'">
-                        <i class="fas fa-user"></i>
-                    </button>
                     <button class="btn btn-sm cart-glass-btn" aria-label="عربة التسوق"
                         onclick="window.location.href='cart.html'">
                         <i class="fas fa-shopping-cart"></i>
                         <span id="cart-count-badge" class="badge bg-danger"
                             style="display: none; position: absolute; top: -5px; right: -5px; font-size: 0.7rem;">0</span>
+                    </button>
+                    <button id="user-nav-btn" class="btn btn-sm cart-glass-btn" aria-label="حساب المستخدم"
+                        onclick="window.location.href='login.html'">
+                        <i class="fas fa-user"></i>
                     </button>
                 </div>
             </div>
@@ -1097,6 +1097,7 @@
     <!-- jQuery and Enhanced Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="enhanced-scripts.js?v=4"></script>
+    <script src="assets/js/nav-auth.js"></script>
 </body>
 
 </html>
