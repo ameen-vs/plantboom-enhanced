@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعداد الحساب - PlantBoom</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Arabic Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #1a8a5a;
+            --primary-light: #25aa72;
+            --bg-color: #f7f9f8;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: 'Almarai', sans-serif;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .profile-container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .profile-card {
+            background-color: white;
+            border-radius: 16px;
+            border: 0.5px solid var(--border-color);
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        /* Progress Indicator */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .dot.completed {
+            background-color: var(--primary-green);
+        }
+        .dot.active {
+            background-color: var(--primary-green);
+            transform: scale(1.3);
+            box-shadow: 0 0 0 4px rgba(26, 138, 90, 0.2);
+        }
+        
+        .profile-title {
+            text-align: center;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+        }
+        .profile-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        /* Avatar Upload */
+        .avatar-upload {
+            position: relative;
+            max-width: 100px;
+            margin: 0 auto 30px;
+        }
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            object-fit: cover;
+            background-color: #f1f5f9;
+        }
+        .avatar-edit-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--primary-green);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        .avatar-edit-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-control, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(26, 138, 90, 0.15);
+        }
+
+        /* Button */
+        .btn-submit {
+            background-color: var(--primary-green);
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-submit:hover:not(:disabled) {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .btn-submit:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* Success Animation */
+        .success-overlay {
+            position: absolute;
+            top:0; left:0; right:0; bottom:0;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .success-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #d1fae5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 40px;
+            margin-bottom: 20px;
+            transform: scale(0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .success-overlay.show .checkmark-circle {
+            transform: scale(1);
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        
+        <!-- Progress Indicator -->
+        <div class="progress-dots">
+            <div class="dot completed" title="Login"></div>
+            <div class="dot active" title="Profile"></div>
+            <div class="dot" title="Done"></div>
+        </div>
+
+        <div class="profile-card">
+            <h1 class="profile-title">إكمال الحساب</h1>
+            <p class="profile-subtitle">يرجى ملء معلوماتك. ستساعدنا في تسريع عملية الشراء مستقبلاً.</p>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                
+                <!-- Avatar Upload (simulated) -->
+                <div class="avatar-upload">
+                    <img src="https://ui-avatars.com/api/?name=User&background=1a8a5a&color=fff" id="avatarPreview" class="avatar-preview" alt="User Avatar">
+                    <label for="avatarInput" class="avatar-edit-btn">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="handleAvatarChange(event)">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="fullName">الاسم الكامل *</label>
+                            <input type="text" class="form-control" id="fullName" required placeholder="أدخل اسمك الكامل">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="phone">رقم الهاتف *</label>
+                            <input type="tel" class="form-control" id="phone" dir="ltr" required placeholder="مثال: 0612345678">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="country">البلد *</label>
+                            <select class="form-select" id="country" required>
+                                <option value="Morocco" selected>المغرب</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label" for="city">المدينة *</label>
+                            <input type="text" class="form-control" id="city" required placeholder="أدخل مدينتك">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label" for="postalCode">الرمز البريدي</label>
+                            <input type="text" class="form-control" id="postalCode" placeholder="أدخل الرمز البريدي" inputmode="numeric">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="form-label" for="address">عنوان التوصيل (الشارع، العمارة، إلخ)</label>
+                            <input type="text" class="form-control" id="address" placeholder="أدخل عنوان الشارع">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="general-error" class="alert alert-danger" style="display:none; font-size: 0.9rem;"></div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    حفظ وإكمال
+                    <i class="fas fa-check-circle" id="btn-icon"></i>
+                </button>
+            </form>
+
+            <!-- Success Overlay -->
+            <div class="success-overlay" id="successOverlay">
+                <div class="checkmark-circle">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2 style="font-weight: 800; color: var(--text-dark); margin-bottom: 10px;">أنت جاهز!</h2>
+                <p style="color: var(--text-muted); text-align: center;">تم حفظ معلوماتك بنجاح. سيتم تعبئتها تلقائياً عند الدفع.</p>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Logic -->
+    <script src="assets/js/profile-setup.js"></script>
+</body>
+</html>

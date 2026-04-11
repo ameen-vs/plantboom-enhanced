@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - PlantBoom</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Arabic Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <!-- Google Identity Services Setup for OAuth -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root {
+            --primary-green: #1a8a5a;
+            --primary-light: #25aa72;
+            --bg-color: #f7f9f8;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+        body {
+            font-family: 'Almarai', sans-serif;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+        }
+        .auth-card {
+            background-color: white;
+            border-radius: 16px;
+            border: 0.5px solid var(--border-color);
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .brand-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .auth-title {
+            text-align: center;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+        }
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        /* Segmented Control */
+        .segmented-control {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+        }
+        .segment-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .segment-btn.active {
+            background: white;
+            color: var(--primary-green);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Inputs */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(26, 138, 90, 0.15);
+        }
+        .password-toggle {
+            position: absolute;
+            left: 16px;
+            top: 42px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+        .phone-input-group {
+            display: flex;
+            direction: ltr; /* keep prefix ltr */
+        }
+        .phone-prefix {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-right: none;
+            padding: 12px 16px;
+            border-radius: 8px 0 0 8px;
+            color: var(--text-dark);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .phone-input {
+            border-radius: 0 8px 8px 0;
+            border-left: 1px solid var(--border-color);
+        }
+
+        /* OTP Inputs */
+        .otp-container {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            direction: ltr; /* Ensure boxes flow left-to-right */
+        }
+        .otp-input {
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .otp-input:focus {
+            border-color: var(--primary-green);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 138, 90, 0.15);
+        }
+
+        /* Buttons */
+        .btn-primary-green {
+            background-color: var(--primary-green);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn-primary-green:hover {
+            background-color: var(--primary-light);
+        }
+        .btn-primary-green:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        .btn-outline:hover {
+            background-color: #f8fafc;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+            color: var(--text-muted);
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .divider:not(:empty)::before { margin-right: .25em; }
+        .divider:not(:empty)::after { margin-left: .25em; }
+        
+        .timer-text {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 15px;
+        }
+        .resend-link {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .resend-link.disabled {
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* Hide elements by default */
+        .hidden { display: none !important; }
+        
+        /* Links */
+        .bottom-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .bottom-link a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        #google-btn-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        /* Error messages */
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Brand -->
+            <div class="brand-logo">
+                <svg width="45" height="45" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 85 C30 85 10 60 10 30 C10 10 40 0 50 25 C60 0 90 10 90 30 C90 60 70 85 50 85 Z" fill="#1a8a5a"/>
+                    <path d="M50 85 C60 85 90 60 90 30 C90 10 60 0 50 25" fill="#146c46" opacity="0.8"/>
+                </svg>
+            </div>
+            <h1 class="auth-title">مرحباً بك في PlantBoom</h1>
+            <p class="auth-subtitle">سجل الدخول لإدارة طلباتك ومتابعة نمو نباتاتك</p>
+
+            <!-- Segmented Tabs -->
+            <div class="segmented-control" id="authTabs">
+                <button class="segment-btn active" data-target="phone-auth">رقم الهاتف</button>
+                <button class="segment-btn" data-target="email-auth">البريد الإلكتروني</button>
+            </div>
+            
+            <div id="general-error" class="alert alert-danger hidden" style="font-size: 0.9rem;"></div>
+
+            <!-- TAB 1: PHONE AUTH -->
+            <div id="phone-auth" class="auth-view">
+                
+                <!-- Step 1: Request OTP -->
+                <div id="phone-step-1">
+                    <div class="form-group">
+                        <label class="form-label">رقم الهاتف</label>
+                        <div class="phone-input-group">
+                            <span class="phone-prefix">+212</span>
+                            <input type="tel" class="form-control phone-input" id="phone-input" placeholder="612 345 678" dir="ltr">
+                        </div>
+                        <div class="error-msg" id="phone-error">رقم الهاتف غير صالح</div>
+                    </div>
+                    
+                    <button class="btn-whatsapp" id="btn-whatsapp" onclick="sendOTP('whatsapp')">
+                        المتابعة عبر واتساب
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
+                    <button class="btn-outline" id="btn-sms" onclick="sendOTP('sms')">
+                        إرسال رسالة نصية (SMS)
+                    </button>
+                </div>
+
+                <!-- Step 2: Verify OTP -->
+                <div id="phone-step-2" class="hidden">
+                    <p class="text-center" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+                        أدخل الرمز المكون من 6 أرقام المرسل إلى <span id="display-phone" dir="ltr" style="font-weight:bold;color:var(--text-dark)"></span>
+                    </p>
+                    
+                    <div class="otp-container" id="otp-inputs">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]*" inputmode="numeric">
+                    </div>
+                    
+                    <button class="btn-primary-green mt-4" id="btn-verify-otp" onclick="verifyOTP()">تأكيد الرمز</button>
+                    
+                    <div class="timer-text">
+                        <span id="countdown-text">يمكنك إعادة الإرسال بعد <span id="timer">60</span> ثانية</span>
+                        <a class="resend-link disabled hidden" id="resend-btn" onclick="sendOTP('sms')">إعادة إرسال الرمز</a>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="javascript:void(0)" onclick="resetPhoneStep()" style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none;">&rarr; تغيير رقم الهاتف</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: EMAIL AUTH -->
+            <div id="email-auth" class="auth-view hidden">
+                <form id="email-form" onsubmit="handleEmailAuth(event)">
+                    <div class="form-group" id="name-group" class="hidden" style="display:none;">
+                        <label class="form-label" for="email-name">الاسم الكامل</label>
+                        <input type="text" class="form-control" id="email-name" placeholder="أدخل اسمك الكامل">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email-input">البريد الإلكتروني</label>
+                        <input type="email" class="form-control" id="email-input" placeholder="اسم@مثال.com" required dir="ltr">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email-password">كلمة المرور</label>
+                        <input type="password" class="form-control" id="email-password" placeholder="••••••••" required dir="ltr">
+                        <i class="fas fa-eye password-toggle" id="toggle-password" onclick="togglePasswordVisibility()"></i>
+                    </div>
+
+                    <div style="text-align: left; margin-bottom: 20px;">
+                        <a href="#" style="font-size: 0.85rem; color: var(--primary-green); text-decoration: none;" id="forgot-password-link">نسيت كلمة المرور؟</a>
+                    </div>
+
+                    <button type="submit" class="btn-primary-green" id="btn-email-submit">تسجيل الدخول</button>
+                    
+                    <div class="bottom-link" id="email-toggle-text">
+                        ليس لديك حساب؟ <a href="javascript:void(0)" onclick="toggleSignupMode()">إنشاء حساب جديد</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- GOOGLE AUTH -->
+            <div class="divider">أو</div>
+            <div id="google-btn-wrapper"></div>
+
+        </div>
+    </div>
+
+    <!-- Core Logic -->
+    <script src="assets/js/login.js"></script>
+</body>
+</html>

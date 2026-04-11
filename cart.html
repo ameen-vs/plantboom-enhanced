@@ -274,10 +274,23 @@
         }
 
         .form-label {
-            display: block;
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--text-dark);
+        }
+
+        .edit-link {
+            font-size: 0.8rem;
+            color: var(--primary-green);
+            text-decoration: none;
+            display: none;
+        }
+
+        .edit-link:hover {
+            color: var(--primary-green-dark);
+            text-decoration: underline;
         }
 
         .form-control {
@@ -366,6 +379,16 @@
                     <li class="nav-item"><a class="nav-link" href="index.html#testimonials">الآراء</a></li>
                     <li class="nav-item"><a class="nav-link" href="index.html#contact">اتصل بنا</a></li>
                 </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-sm cart-glass-btn" aria-label="حساب المستخدم"
+                        onclick="window.location.href='login.html'">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="btn btn-sm cart-glass-btn" aria-label="عربة التسوق"
+                        onclick="window.location.href='cart.html'" style="display:none;">
+                        <i class="fas fa-shopping-cart"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -429,21 +452,30 @@
 
                     <form id="wa-checkout-form" onsubmit="submitWhatsAppOrder(event)">
                         <div class="form-group">
-                            <label class="form-label" for="customer-name">الاسم الكامل *</label>
+                            <label class="form-label" for="customer-name">
+                                <span>الاسم الكامل *</span>
+                                <a href="javascript:void(0)" class="edit-link" id="edit-customer-name" onclick="enableEdit('customer-name')">تعديل</a>
+                            </label>
                             <input type="text" id="customer-name" class="form-control" placeholder="أدخل اسمك الكامل"
                                 required oninput="validateForm()">
                             <div class="error-message" id="error-name">الاسم مطلوب</div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="customer-phone">رقم الهاتف *</label>
+                            <label class="form-label" for="customer-phone">
+                                <span>رقم الهاتف *</span>
+                                <a href="javascript:void(0)" class="edit-link" id="edit-customer-phone" onclick="enableEdit('customer-phone')">تعديل</a>
+                            </label>
                             <input type="tel" id="customer-phone" class="form-control"
                                 placeholder="مثال: 0612345678 أو +212" dir="ltr" required oninput="validateForm()">
                             <div class="error-message" id="error-phone">رقم الهاتف غير صالح</div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" for="customer-city">المدينة *</label>
+                            <label class="form-label" for="customer-city">
+                                <span>المدينة *</span>
+                                <a href="javascript:void(0)" class="edit-link" id="edit-customer-city" onclick="enableEdit('customer-city')">تعديل</a>
+                            </label>
                             <input type="text" id="customer-city" class="form-control" placeholder="أدخل اسم مدينتك"
                                 required oninput="validateForm()">
                             <div class="error-message" id="error-city">المدينة مطلوبة</div>
@@ -532,7 +564,7 @@
             loadCart();
         }
 
-        function checkout() {
+        async function checkout() {
             // Hide the original summary checkout button and show the checkout form
             const btnCheckout = document.querySelector('.btn-checkout');
             if (btnCheckout) btnCheckout.style.display = 'none';
@@ -545,6 +577,52 @@
 
             // Populate the order summary in the form
             populateCheckoutSummary();
+
+            // Try to fetch profile and prefill
+            try {
+                const res = await fetch('/api/user/profile');
+                if (res.ok) {
+                    const { user } = await res.json();
+                    if (user) {
+                        if (user.full_name) {
+                            const input = document.getElementById('customer-name');
+                            input.value = user.full_name;
+                            input.setAttribute('readonly', true);
+                            input.style.backgroundColor = '#e2e8f0';
+                            document.getElementById('edit-customer-name').style.display = 'inline-block';
+                        }
+                        if (user.phone) {
+                            const input = document.getElementById('customer-phone');
+                            input.value = user.phone;
+                            input.setAttribute('readonly', true);
+                            input.style.backgroundColor = '#e2e8f0';
+                            document.getElementById('edit-customer-phone').style.display = 'inline-block';
+                        }
+                        if (user.city) {
+                            const input = document.getElementById('customer-city');
+                            input.value = user.city;
+                            input.setAttribute('readonly', true);
+                            input.style.backgroundColor = '#e2e8f0';
+                            document.getElementById('edit-customer-city').style.display = 'inline-block';
+                        }
+                        if (user.delivery_address) {
+                            let note = document.getElementById('customer-notes').value;
+                            document.getElementById('customer-notes').value = note + (note ? '\\n' : '') + 'العنوان المحفوظ: ' + user.delivery_address;
+                        }
+                        validateForm();
+                    }
+                }
+            } catch (err) {
+                console.log('User not logged in or API issue', err);
+            }
+        }
+
+        function enableEdit(inputId) {
+            const input = document.getElementById(inputId);
+            input.removeAttribute('readonly');
+            input.style.backgroundColor = '#f8fafc';
+            input.focus();
+            document.getElementById('edit-' + inputId).style.display = 'none';
         }
 
         function populateCheckoutSummary() {
