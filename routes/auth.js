@@ -8,20 +8,36 @@ const twilio = require('twilio');
 const router = express.Router();
 
 // Env variables checks
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://dummy-url.supabase.co';
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy_key';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-dev';
-const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
-const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || '';
-const TWILIO_VERIFY_SERVICE_SID = process.env.TWILIO_VERIFY_SERVICE_SID || '';
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+const TWILIO_VERIFY_SERVICE_SID = process.env.TWILIO_VERIFY_SERVICE_SID;
 
 // Initialize Supabase Admin Client
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-    auth: {
-        autoRefreshToken: false,
-        persistSession: false
+let supabase;
+if (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
+    supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+        auth: {
+            autoRefreshToken: false,
+            persistSession: false
+        }
+    });
+} else {
+    console.error("CRITICAL ERROR: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing!");
+}
+
+// Global check middleware
+const checkConfig = (req, res, next) => {
+    if (!supabase) {
+        return res.status(500).json({ 
+            error: 'Server configuration error: Missing Supabase credentials.',
+            details: 'Please check your Vercel Environment Variables (SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY)'
+        });
     }
-});
+    next();
+};
 
 // Initialize Twilio
 let twilioClient;
@@ -80,14 +96,16 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
 };
 
 /* -----------------------------------------
-   [GET] /api/auth/debug
-   Testing tool to verify Vercel Environment Variables
+   [GET] /api/auth/status
+   Health check for debugging
 ----------------------------------------- */
-router.get('/debug', (req, res) => {
+router.get('/status', (res, req) => {
     res.json({
-        hasSupabaseUrl: !!process.env.SUPABASE_URL,
-        supabaseUrlValue: process.env.SUPABASE_URL || 'NOT SET',
-        usingFallback: SUPABASE_URL === 'https://dummy-url.supabase.co'
+        supabase_configured: !!SUPABASE_URL,
+        supabase_url_preview: SUPABASE_URL ? (SUPABASE_URL.substring(0, 15) + '...') : 'missing',
+        jwt_configured: !!JWT_SECRET,
+        twilio_configured: !!TWILIO_ACCOUNT_SID,
+        node_version: process.version
     });
 });
 
@@ -95,7 +113,7 @@ router.get('/debug', (req, res) => {
    [POST] /api/auth/register
    Email/Password signup using bcrypt.
 ----------------------------------------- */
-router.post('/register', async (req, res) => {
+router.post('/register', checkConfig, async (req, res) => {
     try {
         const { email, password, fullName } = registerSchema.parse(req.body);
 
@@ -155,7 +173,7 @@ router.post('/register', async (req, res) => {
    [POST] /api/auth/login
    Standard email/password login
 ----------------------------------------- */
-router.post('/login', async (req, res) => {
+router.post('/login', checkConfig, async (req, res) => {
     try {
         const { email, password } = loginSchema.parse(req.body);
 
@@ -203,7 +221,7 @@ router.post('/login', async (req, res) => {
    [POST] /api/auth/send-otp
    Send OTP via Twilio (MOCKED FOR DEV)
 ----------------------------------------- */
-router.post('/send-otp', async (req, res) => {
+router.post('/send-otp', checkConfig, async (req, res) => {
     try {
         const { phone, method } = sendOtpSchema.parse(req.body);
 
@@ -233,7 +251,7 @@ router.post('/send-otp', async (req, res) => {
    [POST] /api/auth/verify-otp
    Verify OTP (MOCKED FOR DEV)
 ----------------------------------------- */
-router.post('/verify-otp', async (req, res) => {
+router.post('/verify-otp', checkConfig, async (req, res) => {
     try {
         const { phone, code } = verifyOtpSchema.parse(req.body);
 
@@ -287,7 +305,7 @@ router.post('/verify-otp', async (req, res) => {
    [POST] /api/auth/google
    Parse Google idToken, Create/Login User
 ----------------------------------------- */
-router.post('/google', async (req, res) => {
+router.post('/google', checkConfig, async (req, res) => {
     try {
         const { OAuth2Client } = require('google-auth-library');
         const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);

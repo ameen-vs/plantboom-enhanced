@@ -89,10 +89,18 @@ async function handleEmailAuth(e) {
             body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
+        // Check if response is JSON
+        const contentType = res.headers.get("content-type");
+        let data;
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            throw new Error(`Server returned non-JSON response: ${res.status} ${res.statusText}. Content: ${text.substring(0, 100)}...`);
+        }
 
         if (!res.ok) {
-            throw new Error(data.error || 'Authentication failed');
+            throw new Error(data.error || data.details || 'Authentication failed');
         }
 
         // Success - Handle redirect
@@ -130,8 +138,16 @@ async function sendOTP(method) {
             body: JSON.stringify({ phone: currentPhone, method })
         });
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to send OTP');
+        const contentType = res.headers.get("content-type");
+        let data;
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            throw new Error(`Server error: ${res.status}. Please check Vercel Logs.`);
+        }
+
+        if (!res.ok) throw new Error(data.error || data.details || 'Failed to send OTP');
 
         // Show step 2
         document.getElementById('phone-step-1').classList.add('hidden');
@@ -172,8 +188,16 @@ async function verifyOTP() {
             body: JSON.stringify({ phone: currentPhone, code })
         });
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Invalid OTP code');
+        const contentType = res.headers.get("content-type");
+        let data;
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            data = await res.json();
+        } else {
+            const text = await res.text();
+            throw new Error(`Server error: ${res.status}.`);
+        }
+
+        if (!res.ok) throw new Error(data.error || data.details || 'Invalid OTP code');
 
         handleLoginSuccess(data.user);
     } catch (err) {
