@@ -1,6 +1,6 @@
 const express = require('express');
 const z = require('zod');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { createClient } = require('@supabase/supabase-js');
 const twilio = require('twilio');
@@ -8,8 +8,8 @@ const twilio = require('twilio');
 const router = express.Router();
 
 // Env variables checks
-const SUPABASE_URL = process.env.SUPABASE_URL || '';
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://dummy-url.supabase.co';
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'dummy_key';
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-for-dev';
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
 const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || '';
