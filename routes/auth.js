@@ -80,6 +80,18 @@ const setAuthCookies = (res, accessToken, refreshToken) => {
 };
 
 /* -----------------------------------------
+   [GET] /api/auth/debug
+   Testing tool to verify Vercel Environment Variables
+----------------------------------------- */
+router.get('/debug', (req, res) => {
+    res.json({
+        hasSupabaseUrl: !!process.env.SUPABASE_URL,
+        supabaseUrlValue: process.env.SUPABASE_URL || 'NOT SET',
+        usingFallback: SUPABASE_URL === 'https://dummy-url.supabase.co'
+    });
+});
+
+/* -----------------------------------------
    [POST] /api/auth/register
    Email/Password signup using bcrypt.
 ----------------------------------------- */
