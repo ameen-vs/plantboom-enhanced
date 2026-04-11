@@ -28,3 +28,6 @@ app.use('/api/user', userRoutes);
 app.listen(PORT, () => {
     console.log(`Server running on port http://localhost:${PORT}`);
 });
+
+// Required for Vercel Serverless deployment
+module.exports = app;
