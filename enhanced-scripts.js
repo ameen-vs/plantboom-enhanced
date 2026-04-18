@@ -19,8 +19,10 @@
         initHeroTilt();
         initSearchBarInteractions();
         initProductTabs();
+        initDashboard();
 
         // Initialize WOW.js for scroll animations
+
         if (typeof WOW === 'function') {
             new WOW({
                 boxClass: 'wow',
@@ -489,7 +491,7 @@
             if (!indicator.length) return;
             const tabWidth = $tab.outerWidth();
             const leftPos = $tab.position().left;
-            
+
             indicator.css({
                 width: tabWidth + 'px',
                 left: leftPos + 'px'
@@ -505,7 +507,7 @@
         }
 
         // Update indicator on window resize
-        $(window).on('resize', function() {
+        $(window).on('resize', function () {
             const $active = $('.product-tab.active');
             if ($active.length) {
                 indicator.css('transition', 'none');
@@ -516,7 +518,7 @@
             }
         });
 
-        tabs.on('click', function() {
+        tabs.on('click', function () {
             const $btn = $(this);
             const targetFilter = $btn.data('filter');
 
@@ -541,18 +543,18 @@
 
             // Phase 1: Fade out current
             $currentGrid.addClass('grid-fade-out');
-            
+
             setTimeout(() => {
                 $currentGrid.removeClass('active grid-fade-out').addClass('d-none');
-                
+
                 // Phase 2: Fade in next
                 $nextGrid.removeClass('d-none').addClass('active grid-fade-in');
-                
+
                 // Phase 3: Stagger cards
                 const $cards = $nextGrid.find('.col-lg-3, .col-lg-4');
                 $cards.removeClass('card-stagger-in'); // Reset if needed
-                
-                $cards.each(function(index) {
+
+                $cards.each(function (index) {
                     const $card = $(this);
                     $card.css('animation-delay', `${index * 80}ms`);
                     $card.addClass('card-stagger-in');
@@ -567,4 +569,269 @@
         });
     }
 
+    function initDashboard() {
+        const dashSection = document.getElementById('performance');
+        if (!dashSection) return;
+
+        // --- 1. Floating Leaves Canvas (Scoped) ---
+        const lc = document.getElementById('leafCanvasDashboard');
+        if (lc) {
+            const ctx = lc.getContext('2d');
+            const resizeLc = () => {
+                lc.width = dashSection.offsetWidth;
+                lc.height = dashSection.offsetHeight;
+            };
+            resizeLc();
+            window.addEventListener('resize', resizeLc);
+
+            const leaves = Array.from({ length: 15 }, () => ({
+                x: Math.random() * lc.width,
+                y: Math.random() * lc.height,
+                size: 6 + Math.random() * 10,
+                speed: 0.15 + Math.random() * 0.3,
+                angle: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.01,
+                opacity: 0.04 + Math.random() * 0.06,
+                drift: (Math.random() - 0.5) * 0.2,
+                green: Math.random() > 0.45
+            }));
+
+            function drawLeaf(lx, ly, sz, angle, opacity, green) {
+                ctx.save();
+                ctx.translate(lx, ly);
+                ctx.rotate(angle);
+                ctx.globalAlpha = opacity;
+                const c = green ? 'rgba(45,190,96,' : 'rgba(100,200,130,';
+                ctx.beginPath();
+                ctx.moveTo(0, -sz);
+                ctx.bezierCurveTo(sz * 0.85, -sz * 0.45, sz * 0.85, sz * 0.45, 0, sz);
+                ctx.bezierCurveTo(-sz * 0.85, sz * 0.45, -sz * 0.85, -sz * 0.45, 0, -sz);
+                ctx.fillStyle = c + '0.85)';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            (function animLeaves() {
+                ctx.clearRect(0, 0, lc.width, lc.height);
+                leaves.forEach(l => {
+                    l.y -= l.speed;
+                    l.x += l.drift;
+                    l.angle += l.rotSpeed;
+                    if (l.y < -20) { l.y = lc.height + 20; l.x = Math.random() * lc.width; }
+                    if (l.x < -30 || l.x > lc.width + 30) l.x = Math.random() * lc.width;
+                    drawLeaf(l.x, l.y, l.size, l.angle, l.opacity, l.green);
+                });
+                requestAnimationFrame(animLeaves);
+            })();
+        }
+
+        // --- 2. Cursor Glow (Scoped) ---
+        const glow = document.getElementById('cursorGlowDashboard');
+        if (glow) {
+            dashSection.addEventListener('mousemove', e => {
+                const rect = dashSection.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                glow.style.left = x + 'px';
+                glow.style.top = y + 'px';
+                glow.style.opacity = '1';
+            });
+            dashSection.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+        }
+
+        // --- 3. Sparklines Algorithm ---
+        function drawSparkline(id, data, color) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return;
+            const parent = canvas.parentElement;
+            canvas.width = parent.offsetWidth;
+            canvas.height = 35;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const range = max - min || 1;
+            const points = data.map((v, i) => ({
+                x: (i / (data.length - 1)) * w,
+                y: h - ((v - min) / range) * (h - 6) - 3
+            }));
+
+            ctx.clearRect(0, 0, w, h);
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            points.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Fill
+            ctx.lineTo(w, h);
+            ctx.lineTo(0, h);
+            ctx.closePath();
+            ctx.fillStyle = color.replace('rgb', 'rgba').replace(')', ', 0.1)');
+            ctx.fill();
+        }
+
+        drawSparkline('sp1', [60, 70, 65, 80, 75, 90, 85, 95], 'rgb(45, 190, 96)');
+        drawSparkline('sp2', [40, 55, 50, 70, 65, 80, 75, 90], 'rgb(45, 190, 96)');
+        drawSparkline('sp3', [30, 40, 38, 50, 45, 55, 52, 60], 'rgb(45, 190, 96)');
+        drawSparkline('sp4', [10, 8, 12, 9, 14, 11, 16, 13], 'rgb(224, 90, 90)');
+
+        // --- 4. Revenue Big Chart ---
+        const revCtx = document.getElementById('revChartCustom');
+        if (revCtx) {
+            const labels = Array.from({ length: 18 }, (_, i) => String(i + 1));
+            const thisMonth = [2100, 2450, 1980, 3100, 2800, 3500, 3200, 2600, 3800, 3400, 2900, 3600, 3100, 2700, 3300, 2500, 3700, 2200];
+            const lastMonth = [1800, 2200, 2600, 2900, 2700, 3100, 2800, 2500, 3000, 2800, 2600, 3200, 2700, 2400, 3000, 2300, 3100, 1900];
+
+            new Chart(revCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'الشهر الحالي',
+                            data: thisMonth,
+                            borderColor: '#2dbe60',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            fill: true,
+                            backgroundColor: 'rgba(45, 190, 96, 0.05)'
+                        },
+                        {
+                            label: 'الشهر السابق',
+                            data: lastMonth,
+                            borderColor: 'rgba(255, 255, 255, 0.15)',
+                            borderDash: [5, 5],
+                            borderWidth: 1.5,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(10, 21, 16, 0.9)',
+                            titleColor: '#fff',
+                            bodyColor: 'rgba(255, 255, 255, 0.7)',
+                            borderColor: 'rgba(45, 190, 96, 0.3)',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: context => ` $${(context.parsed.y / 1000).toFixed(1)}K`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 9 }, color: 'rgba(255, 255, 255, 0.3)' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: {
+                                font: { size: 9, family: 'DM Mono' },
+                                color: 'rgba(255, 255, 255, 0.3)',
+                                callback: val => '$' + (val / 1000).toFixed(0) + 'K'
+                            },
+                            border: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 5. Data Population (Staggered) ---
+        const products = [
+            { name: 'جرين بوستر بريميوم', cat: 'أرض', rev: '5490 دم', pct: 100, color: '#2dbe60', icon: '🌿' },
+            { name: 'جرين بوستر 10 كجم', cat: 'ديكور', rev: '1200 دم', pct: 77, color: '#6ab4f5', icon: '🪴' },
+            { name: 'تربة عضوية معالجة', cat: 'أرض', rev: '3230 دم', pct: 64, color: '#efb840', icon: '🌱' },
+            { name: 'طقم بذور الربيع', cat: 'بذور', rev: '800 دم', pct: 51, color: '#2dbe60', icon: '🌸' },
+            { name: 'مزهرية ديكور 1', cat: 'أدوات', rev: '450 دم', pct: 41, color: '#6ab4f5', icon: '💧' },
+        ];
+
+        const pl = document.getElementById('productListCustom');
+        if (pl) {
+            products.forEach((p, i) => {
+                const row = document.createElement('div');
+                row.className = 'product-row';
+                row.style.animationDelay = (i * 0.1) + 's';
+                row.innerHTML = `
+                    <span class="p-rank">${i + 1}</span>
+                    <div class="p-icon" style="background:${p.color}18;">${p.icon}</div>
+                    <div class="p-info">
+                        <div class="p-name">${p.name}</div>
+                        <div class="p-cat">${p.cat}</div>
+                    </div>
+                    <div class="p-bar-wrap">
+                        <div class="p-bar" style="width: 0%; background: ${p.color};" data-w="${p.pct}"></div>
+                    </div>
+                    <div class="p-rev">${p.rev}</div>
+                `;
+                pl.appendChild(row);
+            });
+        }
+
+        const funnelSteps = [
+            { label: 'الزوار', pct: 100, color: '#2dbe60' },
+            { label: 'مشاهدة منتج', pct: 57, color: '#4cad72' },
+            { label: 'إضافة للسلة', pct: 25, color: '#efb840' },
+            { label: 'الدفع', pct: 12, color: '#f09060' },
+            { label: 'الشراء', pct: 7, color: '#e05a5a' },
+        ];
+        const fn = document.getElementById('funnelCustom');
+        if (fn) {
+            funnelSteps.forEach(s => {
+                const row = document.createElement('div');
+                row.className = 'funnel-row';
+                row.innerHTML = `
+                    <span class="f-label">${s.label}</span>
+                    <div class="f-outer">
+                        <div class="f-inner" style="width: 0%; background: ${s.color};" data-w="${s.pct}"></div>
+                    </div>
+                    <span class="f-pct">${s.pct}%</span>
+                `;
+                fn.appendChild(row);
+            });
+        }
+
+        const orders = [
+            { id: '#4821', name: 'أحمد ازيان', st: 'st-delivered', sl: 'تم التوصيل', total: '135.00 درهم' },
+            { id: '#4820', name: 'سارة الإدريسي', st: 'st-shipped', sl: 'شُحن', total: '90.00 درهم' },
+            { id: '#4819', name: 'يوسف بنعلي', st: 'st-processing', sl: 'معالجة', total: '190.00 درهم' },
+            { id: '#4818', name: 'نادية الحسني', st: 'st-delivered', sl: 'تم التوصيل', total: '235.00 درهم' },
+            { id: '#4817', name: 'كريم الطاهر', st: 'st-shipped', sl: 'شُحن', total: '270.00 درهم' },
+        ];
+        const ob = document.getElementById('orderBodyCustom');
+        if (ob) {
+            orders.forEach(o => {
+                const tr = document.createElement('tr');
+                tr.className = 'order-row-premium';
+                tr.innerHTML = `
+                    <td style="font-family:'DM Mono',monospace; font-size: 0.8rem; color: rgba(255,255,255,0.3);">${o.id}</td>
+                    <td class="fw-bold">${o.name}</td>
+                    <td><span class="status-custom ${o.st}">${o.sl}</span></td>
+                    <td class="fw-bold">${o.total}</td>
+                `;
+                ob.appendChild(tr);
+            });
+        }
+
+        // --- 6. Animate bars after delay ---
+        setTimeout(() => {
+            document.querySelectorAll('.p-bar').forEach(b => { b.style.width = b.dataset.w + '%'; });
+            document.querySelectorAll('.f-inner').forEach(b => { b.style.width = b.dataset.w + '%'; });
+        }, 500);
+    }
+
+
 })(jQuery);
+

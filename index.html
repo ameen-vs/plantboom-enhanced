@@ -35,7 +35,9 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
+
 
 <body>
 
@@ -228,70 +230,70 @@
             <!-- Terrain Tab (Default) (Tested) -->
             <div id="terrain-grid" class="product-grid-container active">
                 <div class="row g-4">
-                <!-- Product 1 -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-glass-card">
-                        <div class="product-image-wrapper">
-                            <img src="./assets/images/eco-compost-1.png" alt="Eco Compost 1" class="product-image">
-                        </div>
-                        <div class="product-card-content">
-                            <h4 class="product-title">جرين بوستر 10 كجم</h4>
-                            <a href="product-detail.html?id=1" class="btn btn-product-view">
-                                <i class="fas fa-eye ms-2"></i>
-                                عرض المزيد
-                            </a>
+                    <!-- Product 1 -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <img src="./assets/images/eco-compost-1.png" alt="Eco Compost 1" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <h4 class="product-title">جرين بوستر 10 كجم</h4>
+                                <a href="product-detail.html?id=1" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Product 2 -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-glass-card">
-                        <div class="product-image-wrapper">
-                            <img src="./assets/images/eco-tourbe-1.png" alt="Eco Tourbe 1" class="product-image">
-                        </div>
-                        <div class="product-card-content">
-                            <h4 class="product-title">جرين بوستر بريميوم</h4>
-                            <a href="product-detail.html?id=2" class="btn btn-product-view">
-                                <i class="fas fa-eye ms-2"></i>
-                                عرض المزيد
-                            </a>
+                    <!-- Product 2 -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <img src="./assets/images/eco-tourbe-1.png" alt="Eco Tourbe 1" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <h4 class="product-title">جرين بوستر بريميوم</h4>
+                                <a href="product-detail.html?id=2" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Product 3 -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-glass-card">
-                        <div class="product-image-wrapper">
-                            <img src="./assets/images/triple-20.png" alt="Triple 20" class="product-image">
-                        </div>
-                        <div class="product-card-content">
-                            <h4 class="product-title">جرين بوستر منزلي</h4>
-                            <a href="product-detail.html?id=3" class="btn btn-product-view">
-                                <i class="fas fa-eye ms-2"></i>
-                                عرض المزيد
-                            </a>
+                    <!-- Product 3 -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <img src="./assets/images/triple-20.png" alt="Triple 20" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <h4 class="product-title">جرين بوستر منزلي</h4>
+                                <a href="product-detail.html?id=3" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Product 4 -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="product-glass-card">
-                        <div class="product-image-wrapper">
-                            <img src="./assets/images/graines.png" alt="Graines" class="product-image">
-                        </div>
-                        <div class="product-card-content">
-                            <h4 class="product-title">جرين بوستر للحدائق</h4>
-                            <a href="product-detail.html?id=4" class="btn btn-product-view">
-                                <i class="fas fa-eye ms-2"></i>
-                                عرض المزيد
-                            </a>
+                    <!-- Product 4 -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-glass-card">
+                            <div class="product-image-wrapper">
+                                <img src="./assets/images/graines.png" alt="Graines" class="product-image">
+                            </div>
+                            <div class="product-card-content">
+                                <h4 class="product-title">جرين بوستر للحدائق</h4>
+                                <a href="product-detail.html?id=4" class="btn btn-product-view">
+                                    <i class="fas fa-eye ms-2"></i>
+                                    عرض المزيد
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
 
             <!-- Vase Tab (Placeholder) -->
@@ -354,6 +356,100 @@
             </div>
         </div>
     </section>
+    <!-- Dashboard Section - Premium "Deep Forest" Edition -->
+    <section class="dashboard-custom-section" id="performance">
+        <!-- Local Atmosphere Layers -->
+        <canvas id="leafCanvasDashboard"></canvas>
+        <div id="cursorGlowDashboard"></div>
+
+        <div class="container dashboard-content-wrap">
+            <div class="text-center mb-5">
+                <span class="badge badge-premium mb-2">نظرة عامة على المتجر — أبريل 2026</span>
+                <span class="live-status"><span class="live-dot"></span> مباشر</span>
+            </div>
+
+            <div class="metric-grid-custom">
+                <div class="metric-card-premium">
+                    <div class="m-label">ربح</div>
+                    <div class="m-value">8400 دم</div>
+                    <div class="m-delta m-up">+12.4% متوقع</div>
+                    <div class="m-sparkline"><canvas id="sp1"></canvas></div>
+                </div>
+                <div class="metric-card-premium">
+                    <div class="m-label">الطلبات</div>
+                    <div class="m-value">45</div>
+                    <div class="m-delta m-up">+8.1%</div>
+                    <div class="m-sparkline"><canvas id="sp2"></canvas></div>
+                </div>
+                <div class="metric-card-premium">
+                    <div class="m-label">متوسط الطلب</div>
+                    <div class="m-value">135 دم</div>
+                    <div class="m-delta m-up">+3.9%</div>
+                    <div class="m-sparkline"><canvas id="sp3"></canvas></div>
+                </div>
+                <div class="metric-card-premium">
+                    <div class="m-label">عائدات</div>
+                    <div class="m-value">2</div>
+                    <div class="m-delta m-down">+2 هذا الأسبوع</div>
+                    <div class="m-sparkline"><canvas id="sp4"></canvas></div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-7">
+                    <div class="card-premium">
+                        <div class="card-title-custom">الإيرادات اليومية — أبريل</div>
+                        <div class="chart-legend-custom">
+                            <span class="leg-item"><span class="leg-swatch" style="background:#2dbe60;"></span>الشهر
+                                الحالي</span>
+                            <span class="leg-item"><span class="leg-swatch"
+                                    style="background:rgba(255,255,255,0.2);border:1px dashed rgba(255,255,255,0.3);"></span>الشهر
+                                السابق</span>
+                        </div>
+                        <div class="chart-wrapper-custom">
+                            <canvas id="revChartCustom"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card-premium">
+                        <div class="card-title-custom">أعلى المنتجات مبيعاً</div>
+                        <div class="product-list-custom" id="productListCustom"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card-premium">
+                        <div class="card-title-custom">قمع التحويل</div>
+                        <div class="funnel-custom" id="funnelCustom"></div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="card-premium">
+                        <div class="card-title-custom">الطلبات الأخيرة</div>
+                        <div class="table-responsive">
+                            <table class="order-table-custom">
+                                <thead>
+                                    <tr>
+                                        <th style="width:18%">رقم</th>
+                                        <th style="width:36%">العميل</th>
+                                        <th style="width:24%">الحالة</th>
+                                        <th style="width:22%">الإجمالي</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderBodyCustom"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Testimonials Section -->
 
     <!-- Testimonials Section - Vanilla JS (no React dependency) -->
     <section class="testimonials-section" id="testimonials">
