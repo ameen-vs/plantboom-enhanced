@@ -19,6 +19,10 @@
         initHeroTilt();
         initSearchBarInteractions();
         initProductTabs();
+        initAtmosphere('performance', 'leafCanvasDashboard', 'cursorGlowDashboard');
+        initAtmosphere('testimonials', 'leafCanvasTestimonials', 'cursorGlowTestimonials');
+        initAtmosphere('faq', 'leafCanvasFAQ', 'cursorGlowFAQ');
+        initAtmosphere('contact', 'leafCanvasContact', 'cursorGlowContact');
         initDashboard();
 
         // Initialize WOW.js for scroll animations
@@ -569,17 +573,18 @@
         });
     }
 
-    function initDashboard() {
-        const dashSection = document.getElementById('performance');
-        if (!dashSection) return;
+    // ========== Unified Atmosphere Engine (Deep Forest) ==========
+    function initAtmosphere(sectionId, canvasId, glowId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
 
-        // --- 1. Floating Leaves Canvas (Scoped) ---
-        const lc = document.getElementById('leafCanvasDashboard');
+        // --- 1. Floating Leaves Canvas ---
+        const lc = document.getElementById(canvasId);
         if (lc) {
             const ctx = lc.getContext('2d');
             const resizeLc = () => {
-                lc.width = dashSection.offsetWidth;
-                lc.height = dashSection.offsetHeight;
+                lc.width = section.offsetWidth;
+                lc.height = section.offsetHeight;
             };
             resizeLc();
             window.addEventListener('resize', resizeLc);
@@ -611,7 +616,25 @@
                 ctx.restore();
             }
 
-            (function animLeaves() {
+            let isAnimating = false;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!isAnimating) {
+                            isAnimating = true;
+                            animLeaves();
+                        }
+                    } else {
+                        isAnimating = false;
+                    }
+                });
+            }, { threshold: 0.05 });
+            
+            observer.observe(section);
+
+            function animLeaves() {
+                if (!document.getElementById(sectionId) || !isAnimating) return; // Stop if removed or out of view
                 ctx.clearRect(0, 0, lc.width, lc.height);
                 leaves.forEach(l => {
                     l.y -= l.speed;
@@ -621,23 +644,31 @@
                     if (l.x < -30 || l.x > lc.width + 30) l.x = Math.random() * lc.width;
                     drawLeaf(l.x, l.y, l.size, l.angle, l.opacity, l.green);
                 });
-                requestAnimationFrame(animLeaves);
-            })();
+                
+                if (isAnimating) {
+                    requestAnimationFrame(animLeaves);
+                }
+            }
         }
 
-        // --- 2. Cursor Glow (Scoped) ---
-        const glow = document.getElementById('cursorGlowDashboard');
+        // --- 2. Cursor Glow ---
+        const glow = document.getElementById(glowId);
         if (glow) {
-            dashSection.addEventListener('mousemove', e => {
-                const rect = dashSection.getBoundingClientRect();
+            section.addEventListener('mousemove', e => {
+                const rect = section.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 glow.style.left = x + 'px';
                 glow.style.top = y + 'px';
                 glow.style.opacity = '1';
             });
-            dashSection.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+            section.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
         }
+    }
+
+    function initDashboard() {
+        const dashSection = document.getElementById('performance');
+        if (!dashSection) return;
 
         // --- 3. Sparklines Algorithm ---
         function drawSparkline(id, data, color) {

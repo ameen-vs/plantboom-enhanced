@@ -450,437 +450,92 @@
 
 
     <!-- Testimonials Section -->
+    <section class="testimonials-section dashboard-custom-section" id="testimonials">
+        <!-- Atmosphere Layers -->
+        <canvas id="leafCanvasTestimonials"></canvas>
+        <div id="cursorGlowTestimonials"></div>
 
-    <!-- Testimonials Section - Vanilla JS (no React dependency) -->
-    <section class="testimonials-section" id="testimonials">
-        <!-- Mouse-reactive glow follower -->
-        <div class="testimonials-mouse-glow" id="testimonialsGlow"></div>
-
-        <div class="container">
+        <div class="container container-premium">
             <div class="text-center mb-5">
-                <span class="badge bg-success mb-2">شهادات العملاء</span>
-                <h2 class="display-5 fw-bold mb-3">ماذا يقول عملاؤنا</h2>
-                <p class="lead text-muted">آراء حقيقية من مستخدمين راضين</p>
+                <span class="badge badge-premium mb-2">شهادات العملاء</span>
+                <h2 class="display-5 fw-bold text-white mb-3">ماذا يقول عملاؤنا</h2>
             </div>
-
-            <div class="testimonials-carousel" id="testimonialsCarousel">
-                <div class="row g-4 justify-content-center" id="testimonialsRow"></div>
-                <div class="carousel-dots" id="carouselDots"></div>
-            </div>
+            <div id="testimonials-root"></div>
         </div>
     </section>
 
-    <!-- Testimonials Engine (vanilla JS) -->
-    <script>
-        (function () {
-            'use strict';
+    <!-- FAQ Section -->
+    <section class="dashboard-custom-section" id="faq">
+        <!-- Atmosphere Layers -->
+        <canvas id="leafCanvasFAQ"></canvas>
+        <div id="cursorGlowFAQ"></div>
 
-            /* ---- Data ---- */
-            var testimonials = [
-                { id: 1, name: 'أحمد المنصوري', role: 'مزارع', avatar: 'أ', rating: 5, text: 'منتج رائع جداً! استخدمته في حديقتي المنزلية وشاهدت نتائج مذهلة خلال أسبوعين فقط. النباتات أصبحت أكثر خضرة وحيوية.', location: 'الرباط، المغرب' },
-                { id: 2, name: 'فاطمة الزهراء', role: 'صاحبة مشتل', avatar: 'ف', rating: 5, text: 'كمتخصصة في النباتات، أنصح به بشدة. جودة ممتازة وسعر مناسب. عملائي سعداء جداً بالنتائج.', location: 'الدار البيضاء، المغرب' },
-                { id: 3, name: 'كريم بنعلي', role: 'مهندس زراعي', avatar: 'ك', rating: 5, text: 'منتج طبيعي 100% وفعال جداً. استخدمته في مشروعي الزراعي وحققت زيادة في الإنتاجية بنسبة 180%.', location: 'مراكش، المغرب' },
-                { id: 4, name: 'سلمى القاسمي', role: 'هاوية زراعة', avatar: 'س', rating: 5, text: 'أفضل منتج جربته لنباتاتي المنزلية. سهل الاستخدام ونتائجه واضحة من أول استعمال. شكراً PlantBoom!', location: 'فاس، المغرب' },
-                { id: 5, name: 'يوسف الإدريسي', role: 'مالك مزرعة', avatar: 'ي', rating: 5, text: 'استثمار رائع! وفرت الكثير من المال والوقت. محصولي أصبح أكثر جودة وكمية. أنصح به كل المزارعين.', location: 'طنجة، المغرب' },
-                { id: 6, name: 'نادية بنخليفة', role: 'مصممة حدائق', avatar: 'ن', rating: 5, text: 'استخدمه في جميع مشاريعي. النتائج دائماً مبهرة والعملاء راضون. منتج يستحق الثقة.', location: 'أكادير، المغرب' }
-            ];
-
-            var perPage = 3;
-            var currentPage = 0;
-            var totalPages = Math.ceil(testimonials.length / perPage);
-            var isPaused = false;
-            var autoTimer = null;
-            var isInView = false;
-
-            var row = document.getElementById('testimonialsRow');
-            var dotsWrap = document.getElementById('carouselDots');
-            var section = document.getElementById('testimonials');
-            var glow = document.getElementById('testimonialsGlow');
-
-            /* ---- Build a single card HTML ---- */
-            function cardHTML(t) {
-                var stars = '';
-                for (var i = 0; i < 5; i++) {
-                    var filled = i < t.rating;
-                    stars += '<i class="fas fa-star star-3d" data-star-index="' + i + '" data-filled="' + filled + '"></i>';
-                }
-                return '' +
-                    '<div class="testimonial-card" data-card>' +
-                    '  <div class="testimonial-header">' +
-                    '    <div class="testimonial-avatar">' + t.avatar + '</div>' +
-                    '    <div>' +
-                    '      <h5 class="mb-0">' + t.name + '</h5>' +
-                    '      <small class="text-muted">' + t.role + '</small>' +
-                    '    </div>' +
-                    '  </div>' +
-                    '  <div class="testimonial-rating mb-2">' + stars + '</div>' +
-                    '  <p class="testimonial-text">"' + t.text + '"</p>' +
-                    '  <div class="d-flex align-items-center text-muted testimonial-location">' +
-                    '    <i class="fas fa-map-marker-alt ms-2"></i>' +
-                    '    <small>' + t.location + '</small>' +
-                    '  </div>' +
-                    '</div>';
-            }
-
-            /* ---- Render current page ---- */
-            function renderPage() {
-                var start = currentPage * perPage;
-                var slice = testimonials.slice(start, start + perPage);
-                var html = '';
-                slice.forEach(function (t) {
-                    html += '<div class="col-lg-4 col-md-6">' + cardHTML(t) + '</div>';
-                });
-                row.innerHTML = html;
-
-                // Update dots
-                var dots = dotsWrap.querySelectorAll('.dot');
-                dots.forEach(function (d, i) {
-                    d.classList.toggle('active', i === currentPage);
-                });
-
-                // Trigger animations if section is in view
-                if (isInView) {
-                    requestAnimationFrame(function () { triggerPopIn(); });
-                }
-            }
-
-            /* ---- Build dots ---- */
-            function buildDots() {
-                var html = '';
-                for (var i = 0; i < totalPages; i++) {
-                    html += '<button type="button" class="dot' + (i === 0 ? ' active' : '') + '" data-page="' + i + '" aria-label="عرض الشهادات ' + (i + 1) + '"><span class="dot-label">' + (i + 1) + '</span></button>';
-                }
-                dotsWrap.innerHTML = html;
-                dotsWrap.querySelectorAll('.dot').forEach(function (d) {
-                    d.addEventListener('click', function () {
-                        currentPage = parseInt(d.getAttribute('data-page'));
-                        renderPage();
-                        resetAutoTimer();
-                    });
-                });
-            }
-
-            /* ---- Pop-in / Pop-out ---- */
-            function triggerPopIn() {
-                var cards = row.querySelectorAll('[data-card]');
-                cards.forEach(function (card, index) {
-                    card.classList.remove('pop-in', 'pop-out');
-                    card.style.animationDelay = (index * 150) + 'ms';
-                    // Force reflow
-                    void card.offsetWidth;
-                    card.classList.add('pop-in');
-
-                    // Pause auto-rotate on hover
-                    card.addEventListener('mouseenter', function () { isPaused = true; });
-                    card.addEventListener('mouseleave', function () { isPaused = false; });
-                });
-
-                // Trigger 3D star animations after card pop-in
-                setTimeout(function () { animateStars(); }, 300);
-            }
-
-            function triggerPopOut() {
-                var cards = row.querySelectorAll('[data-card]');
-                cards.forEach(function (card) {
-                    card.classList.remove('pop-in');
-                    card.classList.add('pop-out');
-                });
-            }
-
-            /* ---- 3D Star Animations ---- */
-            function animateStars() {
-                var cards = row.querySelectorAll('[data-card]');
-                cards.forEach(function (card, cardIdx) {
-                    var stars = card.querySelectorAll('.star-3d');
-                    stars.forEach(function (star, starIdx) {
-                        var filled = star.getAttribute('data-filled') === 'true';
-                        if (!filled) return;
-
-                        star.classList.remove('star-flip', 'star-idle');
-                        star.style.animationDelay = '';
-                        void star.offsetWidth;
-
-                        var delay = (cardIdx * 200) + (starIdx * 120);
-                        star.style.animationDelay = delay + 'ms';
-                        star.classList.add('star-flip');
-
-                        // After flip, switch to idle float
-                        var flipDuration = 600 + delay;
-                        setTimeout(function () {
-                            star.classList.remove('star-flip');
-                            star.style.animationDelay = (starIdx * 200) + 'ms';
-                            star.classList.add('star-idle');
-                        }, flipDuration);
-                    });
-                });
-            }
-
-            function resetStars() {
-                var stars = row.querySelectorAll('.star-3d');
-                stars.forEach(function (star) {
-                    star.classList.remove('star-flip', 'star-idle');
-                    star.style.animationDelay = '';
-                });
-            }
-
-            /* ---- Auto-rotate ---- */
-            function startAutoTimer() {
-                autoTimer = setInterval(function () {
-                    if (isPaused || !isInView) return;
-                    currentPage = (currentPage + 1) % totalPages;
-                    renderPage();
-                }, 5000);
-            }
-
-            function resetAutoTimer() {
-                clearInterval(autoTimer);
-                startAutoTimer();
-            }
-
-            /* ---- Mouse-reactive glow ---- */
-            if (section && glow) {
-                section.addEventListener('mousemove', function (e) {
-                    var rect = section.getBoundingClientRect();
-                    glow.style.left = (e.clientX - rect.left) + 'px';
-                    glow.style.top = (e.clientY - rect.top) + 'px';
-                });
-            }
-
-            /* ---- Scroll-triggered observer (replays on every entry) ---- */
-            if (section && typeof IntersectionObserver !== 'undefined') {
-                var observer = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (entry) {
-                        if (entry.isIntersecting) {
-                            isInView = true;
-                            triggerPopIn();
-                        } else {
-                            isInView = false;
-                            triggerPopOut();
-                            resetStars();
-                        }
-                    });
-                }, { threshold: 0.15 });
-                observer.observe(section);
-            } else {
-                isInView = true;
-            }
-
-            /* ---- Init ---- */
-            buildDots();
-            renderPage();
-            startAutoTimer();
-        })();
-    </script>
-
-    <!-- Contact Section — Glassmorphism + 3D Liquid Glass -->
-    <section class="contact-glass-section" id="contact">
-        <!-- Micro-grain noise overlay -->
-        <div class="contact-noise" aria-hidden="true"></div>
-        <!-- Mouse-follow blob -->
-        <div class="contact-blob" id="contactBlob" aria-hidden="true"></div>
-
-        <div class="container">
-            <!-- Section header -->
+        <div class="container dashboard-content-wrap">
             <div class="text-center mb-5">
-                <span class="contact-badge">تواصل معنا</span>
-                <h2 class="contact-section-title">نحن هنا لمساعدتك</h2>
-                <p class="contact-section-sub">أرسل لنا رسالة وسنعود إليك في أقرب وقت</p>
+                <span class="badge badge-premium mb-2">الأسئلة الشائعة</span>
+                <h2 class="display-5 fw-bold text-white mb-3">كل ما تود معرفته</h2>
+            </div>
+            <div id="faq-root"></div>
+        </div>
+    </section>
+
+
+    <!-- Contact Section -->
+    <section class="contact-section dashboard-custom-section py-5" id="contact">
+        <!-- Atmosphere Layers -->
+        <canvas id="leafCanvasContact"></canvas>
+        <div id="cursorGlowContact"></div>
+
+        <div class="container dashboard-content-wrap">
+            <div class="text-center mb-5">
+                <span class="badge badge-premium mb-2">اتصل بنا</span>
+                <h2 class="display-5 fw-bold text-white mb-3">نحن هنا لمساعدتكم</h2>
             </div>
 
-            <div class="row g-4 contact-cards-row" id="contactCardsRow">
-                <!-- LEFT: Contact Form Card -->
-                <div class="col-lg-6 order-1 order-lg-1">
-                    <div class="contact-glass-card contact-form-card" data-contact-parallax>
-                        <div class="glass-card-shine" aria-hidden="true"></div>
-                        <h3 class="glass-card-title">أرسل لنا رسالة</h3>
-                        <p class="glass-card-subtitle">سنرد عليك خلال 24 ساعة</p>
-
-                        <form id="contactForm" class="contact-glass-form" action="https://wa.me/c/212657275000"
-                            target="_blank" method="get" autocomplete="off">
-                            <div class="glass-input-group">
-                                <div class="glass-input-wrap">
-                                    <input type="text" id="contactName" class="glass-input" placeholder=" " required>
-                                    <label for="contactName" class="glass-label">الاسم الكامل</label>
-                                    <div class="glass-input-glow"></div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card-premium">
+                        <form id="contactForm" class="p-2">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control glass-input" id="contactName" placeholder=" " required>
+                                        <label for="contactName" class="text-secondary">الاسم الكامل</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" class="form-control glass-input" id="contactEmail" placeholder=" " required>
+                                        <label for="contactEmail" class="text-secondary">البريد الإلكتروني</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="tel" class="form-control glass-input" id="contactPhone" placeholder=" " required>
+                                        <label for="contactPhone" class="text-secondary">رقم الهاتف</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control glass-input" id="contactMessage" placeholder=" " style="height: 150px" required></textarea>
+                                        <label for="contactMessage" class="text-secondary">رسالتك</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="glass-cta-btn w-100 py-3">
+                                        <span class="glass-cta-text">
+                                            <i class="fab fa-whatsapp ms-2"></i> إرسال عبر واتساب
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="glass-input-group">
-                                <div class="glass-input-wrap">
-                                    <input type="email" id="contactEmail" class="glass-input" placeholder=" " required>
-                                    <label for="contactEmail" class="glass-label">البريد الإلكتروني</label>
-                                    <div class="glass-input-glow"></div>
-                                </div>
-                            </div>
-                            <div class="glass-input-group">
-                                <div class="glass-input-wrap">
-                                    <input type="tel" id="contactPhone" class="glass-input" placeholder=" " dir="ltr">
-                                    <label for="contactPhone" class="glass-label">رقم الهاتف</label>
-                                    <div class="glass-input-glow"></div>
-                                </div>
-                            </div>
-                            <div class="glass-input-group">
-                                <div class="glass-input-wrap glass-textarea-wrap">
-                                    <textarea id="contactMessage" class="glass-input glass-textarea" placeholder=" "
-                                        rows="4" required></textarea>
-                                    <label for="contactMessage" class="glass-label">رسالتك</label>
-                                    <div class="glass-input-glow"></div>
-                                </div>
-                            </div>
-                            <button type="submit" class="glass-cta-btn">
-                                <span class="glass-cta-text">
-                                    <i class="fas fa-paper-plane ms-2"></i>
-                                    إرسال الرسالة
-                                </span>
-                                <span class="glass-cta-shine" aria-hidden="true"></span>
-                            </button>
                         </form>
                     </div>
                 </div>
-
-                <!-- RIGHT: Contact Info Card -->
-                <div class="col-lg-6 order-2 order-lg-2">
-                    <div class="contact-glass-card contact-info-card" data-contact-parallax>
-                        <div class="glass-card-shine" aria-hidden="true"></div>
-                        <h3 class="glass-card-title">تواصل معنا</h3>
-                        <p class="glass-card-subtitle">يمكنك الوصول إلينا عبر القنوات التالية</p>
-
-                        <div class="contact-info-list">
-                            <!-- Address -->
-                            <div class="contact-info-pill">
-                                <div class="info-pill-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div class="info-pill-content">
-                                    <span class="info-pill-label">العنوان</span>
-                                    <span class="info-pill-value">المغرب، بوفكران مكناس</span>
-                                </div>
-                            </div>
-                            <!-- Phone -->
-                            <div class="contact-info-pill">
-                                <div class="info-pill-icon">
-                                    <i class="fas fa-phone-alt"></i>
-                                </div>
-                                <div class="info-pill-content">
-                                    <span class="info-pill-label">الهاتف</span>
-                                    <span class="info-pill-value" dir="ltr">+212 657275000</span>
-                                </div>
-                            </div>
-                            <!-- Email -->
-                            <div class="contact-info-pill">
-                                <div class="info-pill-icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="info-pill-content">
-                                    <span class="info-pill-label">البريد الإلكتروني</span>
-                                    <span class="info-pill-value">btahabenhachoume@gmail.com</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Social Icons -->
-                        <div class="contact-social-row">
-                            <a href="https://wa.me/c/212657275000" target="_blank" class="contact-social-chip"
-                                aria-label="WhatsApp">
-                                <i class="fab fa-whatsapp"></i>
-                            </a>
-                            <a href="https://www.instagram.com/plamtboom?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-                                target="_blank" class="contact-social-chip" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="https://web.facebook.com/profile.php?id=100087087848123&_rdc=1&_rdr#"
-                                target="_blank" class="contact-social-chip" aria-label="Facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a href="https://www.tiktok.com/@tahaben391" target="_blank" class="contact-social-chip"
-                                aria-label="TikTok">
-                                <i class="fab fa-tiktok"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section: Mouse-follow blob + card parallax + form submit -->
-    <script>
-        (function () {
-            'use strict';
-            var section = document.getElementById('contact');
-            var blob = document.getElementById('contactBlob');
-            var cardsRow = document.getElementById('contactCardsRow');
-            var contactForm = document.getElementById('contactForm');
-
-            // --- WhatsApp Form Submission ---
-            if (contactForm) {
-                contactForm.addEventListener('submit', function (e) {
-                    e.preventDefault(); // Prevent default form action
-
-                    var name = document.getElementById('contactName').value.trim();
-                    var email = document.getElementById('contactEmail').value.trim();
-                    var phone = document.getElementById('contactPhone').value.trim();
-                    var message = document.getElementById('contactMessage').value.trim();
-
-                    // Format the message for WhatsApp
-                    var waMessage = "مرحباً PlantBoom، لـدي استفسار:\n\n" +
-                        "👤 الاسم: " + name + "\n" +
-                        "📧 البريد: " + email + "\n" +
-                        "📱 الهاتف: " + phone + "\n\n" +
-                        "💬 الرسالة:\n" + message;
-
-                    // Encode the string for URL
-                    var encodedMessage = encodeURIComponent(waMessage);
-
-                    // Destination WhatsApp number
-                    var waNumber = "212657275000";
-                    var waUrl = "https://wa.me/" + waNumber + "?text=" + encodedMessage;
-
-                    // Open WhatsApp in a new tab
-                    window.open(waUrl, '_blank');
-                });
-            }
-
-            if (!section || !blob) return;
-
-            var targetX = 0, targetY = 0;
-            var rafId = null;
-
-            // Mouse position relative to section
-            section.addEventListener('mousemove', function (e) {
-                var rect = section.getBoundingClientRect();
-                targetX = e.clientX - rect.left;
-                targetY = e.clientY - rect.top;
-
-                // Match Testimonials: Native transition via left/top
-                blob.style.left = targetX + 'px';
-                blob.style.top = targetY + 'px';
-
-                if (!rafId) rafId = requestAnimationFrame(updateCards);
-            });
-
-            section.addEventListener('mouseenter', function () {
-                blob.style.opacity = '1';
-            });
-
-            section.addEventListener('mouseleave', function () {
-                blob.style.opacity = '0';
-            });
-
-            function updateCards() {
-                if (cardsRow) {
-                    var cards = cardsRow.querySelectorAll('[data-contact-parallax]');
-                    var rect = section.getBoundingClientRect();
-                    var cx = (targetX / rect.width - 0.5) * 2;
-                    var cy = (targetY / rect.height - 0.5) * 2;
-                    cards.forEach(function (card, i) {
-                        var factor = (i === 0) ? -4 : -3;
-                        card.style.transform = 'translate3d(' + (cx * factor) + 'px,' + (cy * factor) + 'px,0)';
-                    });
-                }
-                rafId = null;
-            }
-        })();
-    </script>
 
     <!-- Footer -->
     <footer class="footer bg-dark pt-5 pb-3 footer-glow">
@@ -1190,9 +845,14 @@
         setInterval(updateCartCount, 1000);
     </script>
 
-    <!-- jQuery and Enhanced Scripts -->
+    <!-- jQuery and Core Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+    <!-- Enhanced Scripts -->
     <script src="enhanced-scripts.js?v=4"></script>
+    <script src="react-components.js"></script>
     <script src="assets/js/nav-auth.js"></script>
 </body>
 
