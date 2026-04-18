@@ -2948,6 +2948,11 @@ section[id] {
     font-size: 1.1rem;
     color: #fff;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background 0.3s ease;
+}
+
+.faq-question:hover {
+    background: rgba(16, 185, 129, 0.08);
 }
 
 .faq-question i {
