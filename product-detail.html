@@ -324,6 +324,48 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
+
+        /* Carousel Controls Fix */
+        #productCarousel .carousel-control-prev,
+        #productCarousel .carousel-control-next {
+            position: absolute !important;
+            top: 50% !important;
+            bottom: auto !important;
+            transform: translateY(-50%) !important;
+            width: 46px !important;
+            height: 46px !important;
+            background-color: rgba(0, 0, 0, 0.4) !important;
+            border-radius: 50% !important;
+            opacity: 0.8 !important;
+            margin: 0 15px !important;
+            z-index: 10 !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+        }
+
+        #productCarousel .carousel-control-prev {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        #productCarousel .carousel-control-next {
+            left: 0 !important;
+            right: auto !important;
+        }
+
+        #productCarousel .carousel-control-prev:hover,
+        #productCarousel .carousel-control-next:hover {
+            background-color: var(--primary-green) !important;
+            opacity: 1 !important;
+        }
+
+        #productCarousel .carousel-control-prev-icon,
+        #productCarousel .carousel-control-next-icon {
+            width: 20px !important;
+            height: 20px !important;
+            background-color: transparent !important;
+        }
     </style>
 </head>
 
@@ -381,9 +423,24 @@
 
             <div class="product-detail-card">
                 <div class="row g-4">
-                    <!-- Product Image -->
+                    <!-- Product Image / Carousel -->
                     <div class="col-lg-5">
-                        <img id="product-image" src="" alt="صورة المنتج" class="product-main-image">
+                        <div id="productCarousel" class="carousel slide product-main-image" data-bs-ride="carousel" style="overflow: hidden; padding: 0;">
+                            <div class="carousel-inner" id="carousel-images-container" style="border-radius: 24px;">
+                                <!-- Images will be dynamically injected here -->
+                                <div class="carousel-item active">
+                                    <img id="product-image" src="" alt="صورة المنتج" class="d-block w-100" style="border-radius: 24px; object-fit: cover;">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev" id="carousel-prev" style="display: none;">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">السابق</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next" id="carousel-next" style="display: none;">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">التالي</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Product Information -->
@@ -496,6 +553,19 @@
     <script>
         // Product data
         const products = {
+            'eco-tourbe': {
+                name: 'ECO TOURBE',
+                image: './assets/images/eco-tourbe-carousel/tourbe1.jpeg',
+                images: [
+                    './assets/images/eco-tourbe-carousel/tourbe1.jpeg',
+                    './assets/images/eco-tourbe-carousel/tourbe2.jpeg'
+                ],
+                description: 'تربة زراعية (Tourbe) عالية الجودة، عضوية 100%. تساعد على الاحتفاظ بالماء وتحسن بنية التربة لضمان نمو مثالي وسريع لنباتاتك.',
+                quantities: [
+                    { amount: 1, price: 159, unit: 'كيس واحد (Sac)' },
+                    { amount: 2, price: 299, unit: 'كيسين (2 Sacs)' }
+                ]
+            },
             '1': {
                 name: 'ايكو كومبوست',
                 image: './assets/images/eco-compost-2.png',
@@ -545,8 +615,37 @@
         window.onload = function () {
             if (product) {
                 document.getElementById('product-name').textContent = product.name;
-                document.getElementById('product-image').src = product.image;
                 document.getElementById('product-description').textContent = product.description;
+
+                // Handle Image or Carousel
+                const carouselContainer = document.getElementById('carousel-images-container');
+                const prevBtn = document.getElementById('carousel-prev');
+                const nextBtn = document.getElementById('carousel-next');
+
+                if (product.images && product.images.length > 0) {
+                    carouselContainer.innerHTML = ''; // Clear default
+                    product.images.forEach((imgSrc, index) => {
+                        const itemHtml = `
+                            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                <img src="${imgSrc}" alt="${product.name}" class="d-block w-100" style="border-radius: 24px; object-fit: cover;">
+                            </div>
+                        `;
+                        carouselContainer.innerHTML += itemHtml;
+                    });
+
+                    if (product.images.length > 1) {
+                        prevBtn.style.display = 'flex';
+                        nextBtn.style.display = 'flex';
+                    } else {
+                        prevBtn.style.display = 'flex'; // Force show to satisfy user request even if 1 image
+                        nextBtn.style.display = 'flex';
+                    }
+                } else {
+                    // Fallback to single image
+                    document.getElementById('product-image').src = product.image;
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                }
 
                 // Render quantity options
                 const quantityContainer = document.getElementById('quantity-options');
