@@ -16,14 +16,15 @@
         initNewsletterForm();
         initBackToTop();
         initDynamicLighting();
-        initHeroTilt();
         initSearchBarInteractions();
         initProductTabs();
         initAtmosphere('performance', 'leafCanvasDashboard', 'cursorGlowDashboard');
         initAtmosphere('testimonials', 'leafCanvasTestimonials', 'cursorGlowTestimonials');
         initAtmosphere('faq', 'leafCanvasFAQ', 'cursorGlowFAQ');
         initAtmosphere('contact', 'leafCanvasContact', 'cursorGlowContact');
+        initAtmosphere('home', null, 'cursorGlowHero');
         initDashboard();
+        initHeroCarousel();
 
         // Initialize WOW.js for scroll animations
 
@@ -460,19 +461,7 @@
         bind('.navbar');
     }
 
-    function initHeroTilt() {
-        var card = document.querySelector('.hero-info-card');
-        if (!card) return;
-        card.addEventListener('mousemove', function (e) {
-            var r = card.getBoundingClientRect();
-            var ry = ((e.clientX - r.left) / r.width - 0.5) * 10;
-            var rx = ((e.clientY - r.top) / r.height - 0.5) * -10;
-            card.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
-        });
-        card.addEventListener('mouseleave', function () {
-            card.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        });
-    }
+
 
     function initSearchBarInteractions() {
         var bar = document.querySelector('.header-search-bar');
@@ -630,7 +619,7 @@
                     }
                 });
             }, { threshold: 0.05 });
-            
+
             observer.observe(section);
 
             function animLeaves() {
@@ -644,7 +633,7 @@
                     if (l.x < -30 || l.x > lc.width + 30) l.x = Math.random() * lc.width;
                     drawLeaf(l.x, l.y, l.size, l.angle, l.opacity, l.green);
                 });
-                
+
                 if (isAnimating) {
                     requestAnimationFrame(animLeaves);
                 }
@@ -863,6 +852,180 @@
         }, 500);
     }
 
+
+    function initHeroCarousel() {
+        const track = document.getElementById('track');
+        if (!track) return;
+
+        const pnDisplay = document.getElementById('pnDisplay');
+        const dotsEl = document.getElementById('dots');
+        const cur = document.getElementById('cur');
+        const curArrow = document.getElementById('curArrow');
+
+        const plants = [
+            { name: 'مونستيرا ديليسيوسا', price: 'ابتداءً من 120 درهم', tag: 'الأكثر مبيعاً', color: '#3d7a35', svg: `<svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="95" rx="18" ry="8" fill="#1a3d1a" opacity=".6"/><rect x="36" y="60" width="8" height="36" rx="4" fill="#2d5e28"/><path d="M40 62 C30 50 10 48 8 30 C6 15 20 8 32 18 C36 22 38 30 40 40" fill="#4a9e40" opacity=".9"/><path d="M40 62 C50 50 70 48 72 30 C74 15 60 8 48 18 C44 22 42 30 40 40" fill="#5ab84a" opacity=".85"/><path d="M32 18 C28 22 24 28 26 36" stroke="#3d7a35" stroke-width="1.5" stroke-linecap="round"/><path d="M48 18 C52 22 56 28 54 36" stroke="#4a9e40" stroke-width="1.5" stroke-linecap="round"/><circle cx="22" cy="32" r="2" fill="#1a3d1a" opacity=".5"/><circle cx="58" cy="32" r="2" fill="#2d5e28" opacity=".5"/></svg>` },
+            { name: 'بوتس ذهبي', price: 'ابتداءً من 80 درهم', tag: 'سهل العناية', color: '#6a8c30', svg: `<svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="95" rx="16" ry="7" fill="#1a3d1a" opacity=".5"/><rect x="37" y="65" width="6" height="30" rx="3" fill="#2d5e28"/><path d="M40 68 Q25 55 15 40 Q10 30 18 22 Q26 15 34 28 Q38 38 40 52" fill="#7ab830" opacity=".9"/><path d="M34 28 Q30 32 28 40" stroke="#5a8a20" stroke-width="1.2" stroke-linecap="round"/><path d="M40 68 Q55 55 65 40 Q70 30 62 22 Q54 15 46 28 Q42 38 40 52" fill="#9ed840" opacity=".8"/><path d="M46 28 Q50 32 52 40" stroke="#7ab830" stroke-width="1.2" stroke-linecap="round"/><path d="M40 52 Q32 62 28 70" stroke="#5a8a20" stroke-width="1" stroke-linecap="round" opacity=".6"/><path d="M40 52 Q48 62 52 70" stroke="#7ab830" stroke-width="1" stroke-linecap="round" opacity=".6"/></svg>` },
+            { name: 'صبار صحراوي', price: 'ابتداءً من 50 درهم', tag: 'يتحمل الجفاف', color: '#5a8040', svg: `<svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="97" rx="20" ry="8" fill="#1a3d1a" opacity=".5"/><rect x="28" y="45" width="24" height="52" rx="12" fill="#4a7a3a"/><rect x="28" y="45" width="24" height="52" rx="12" fill="url(#cgrad)"/><defs><linearGradient id="cgrad" x1="28" y1="45" x2="52" y2="97" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5a9e4a"/><stop offset="1" stop-color="#3a6a2a"/></linearGradient></defs><rect x="10" y="55" width="20" height="14" rx="7" fill="#4a8a3a" opacity=".9"/><rect x="50" y="62" width="20" height="14" rx="7" fill="#3a7a2a" opacity=".9"/><line x1="32" y1="50" x2="32" y2="95" stroke="#3a6a2a" stroke-width=".8" opacity=".4"/><line x1="36" y1="48" x2="36" y2="96" stroke="#3a6a2a" stroke-width=".8" opacity=".3"/><line x1="40" y1="46" x2="40" y2="97" stroke="#3a6a2a" stroke-width=".8" opacity=".4"/><line x1="44" y1="48" x2="44" y2="96" stroke="#3a6a2a" stroke-width=".8" opacity=".3"/><line x1="48" y1="50" x2="48" y2="95" stroke="#3a6a2a" stroke-width=".8" opacity=".4"/><circle cx="40" cy="43" r="4" fill="#c8e870" opacity=".9"/><circle cx="40" cy="38" r="3" fill="#e0f890" opacity=".8"/></svg>` },
+            { name: 'فيكوس شجرة', price: 'ابتداءً من 180 درهم', tag: 'نادر ومميز', color: '#2d6e40', svg: `<svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="97" rx="14" ry="6" fill="#1a3d1a" opacity=".6"/><rect x="37" y="60" width="6" height="37" rx="3" fill="#3d2a1a"/><rect x="34" y="72" width="5" height="18" rx="2.5" fill="#4a3520" transform="rotate(-20 34 72)"/><rect x="41" y="68" width="5" height="16" rx="2.5" fill="#3d2a1a" transform="rotate(15 41 68)"/><ellipse cx="40" cy="38" rx="26" ry="26" fill="#2d6e40" opacity=".95"/><ellipse cx="32" cy="32" rx="18" ry="18" fill="#3d8a50" opacity=".8"/><ellipse cx="46" cy="42" rx="16" ry="16" fill="#4aaa5a" opacity=".7"/><ellipse cx="38" cy="28" rx="14" ry="14" fill="#5ab860" opacity=".7"/><circle cx="44" cy="30" r="3" fill="#7ad870" opacity=".5"/><circle cx="34" cy="44" r="2" fill="#5aaa50" opacity=".5"/></svg>` },
+            { name: 'لافندر عطري', price: 'ابتداءً من 65 درهم', tag: 'عطري ومريح', color: '#6a5a8c', svg: `<svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="97" rx="15" ry="6" fill="#1a3d1a" opacity=".5"/><rect x="37" y="65" width="6" height="32" rx="3" fill="#3a5a20"/><rect x="30" y="58" width="4" height="22" rx="2" fill="#3a5a20" transform="rotate(-12 30 58)"/><rect x="46" y="56" width="4" height="22" rx="2" fill="#3a5a20" transform="rotate(12 46 56)"/><ellipse cx="40" cy="52" rx="6" ry="16" fill="#8060b0" opacity=".9"/><ellipse cx="30" cy="46" rx="5" ry="14" fill="#7050a8" opacity=".85" transform="rotate(-12 30 46)"/><ellipse cx="50" cy="44" rx="5" ry="14" fill="#9070c0" opacity=".8" transform="rotate(12 50 44)"/><circle cx="40" cy="36" r="3" fill="#c0a0e0" opacity=".7"/><circle cx="30" cy="32" r="2.5" fill="#b090d8" opacity=".6"/><circle cx="50" cy="30" r="2.5" fill="#c8a8e8" opacity=".6"/></svg>` }
+        ];
+
+        let active = 0;
+        let isAnimating = false;
+
+        function buildNameDisplay() {
+            pnDisplay.innerHTML = '';
+            plants.forEach((p, i) => {
+                const d = document.createElement('div');
+                d.className = 'pname' + (i === 0 ? ' active' : '');
+                d.id = 'pn' + i;
+                d.innerHTML = p.name + '<span class="pname-price">' + p.price + '</span>';
+                pnDisplay.appendChild(d);
+            });
+        }
+
+        function buildDots() {
+            dotsEl.innerHTML = '';
+            plants.forEach((_, i) => {
+                const d = document.createElement('div');
+                d.className = 'dot' + (i === 0 ? ' on' : '');
+                d.onclick = () => goTo(i);
+                dotsEl.appendChild(d);
+            });
+        }
+
+        function getCardStyles(idx, total, activeIdx) {
+            const positions = [];
+            const n = total;
+            for (let i = 0; i < n; i++) {
+                const offset = (i - activeIdx + n) % n;
+                const d = offset > n / 2 ? offset - n : offset;
+                positions.push(d);
+            }
+            const d = positions[idx];
+            const abs = Math.abs(d);
+            
+            // Dynamic track scaling
+            const trackW = track.offsetWidth || 900;
+            const cx = trackW / 2;
+            
+            // Responsive card sizing
+            const isMobile = window.innerWidth <= 991;
+            const cardW = isMobile ? 140 : 180;
+            const spread = isMobile ? (cardW * 0.65) : (cardW * 0.85);
+            
+            const x = cx - d * spread - cardW / 2;
+            const z = -abs * (isMobile ? 80 : 120);
+            const scale = 1 - abs * 0.12;
+            const opacity = abs > 2 ? 0 : 1 - abs * 0.18;
+            const rotY = d * 15;
+            const y = abs * (isMobile ? 12 : 20);
+            const zIdx = 10 - abs;
+            
+            return { x, z, scale, opacity, rotY, y, zIdx, d };
+        }
+
+        function renderCards() {
+            const existing = track.querySelectorAll('.card-3d');
+            existing.forEach(c => c.remove());
+            plants.forEach((p, i) => {
+                const s = getCardStyles(i, plants.length, active);
+                if (Math.abs(s.d) > 2) return;
+                const c = document.createElement('div');
+                c.className = 'card-3d';
+                c.style.cssText = `
+              left:${s.x}px;top:${50 + s.y}px;
+              transform:perspective(900px) rotateY(${s.rotY}deg) scale(${s.scale}) translateZ(${s.z}px);
+              opacity:${s.opacity};
+              z-index:${s.zIdx};
+            `;
+                c.innerHTML = `
+              <div class="card-inner">
+                <div class="card-plant-svg">${p.svg}</div>
+                <div class="card-glow"></div>
+                <div class="card-tag">${p.tag}</div>
+              </div>
+            `;
+                c.addEventListener('click', () => goTo(i));
+                track.appendChild(c);
+            });
+        }
+
+        let nameTimeout;
+        function updateName(idx) {
+            pnDisplay.querySelectorAll('.pname').forEach(n => {
+                if (n.id === 'pn' + idx) return;
+                if (n.classList.contains('active')) {
+                    n.classList.remove('active');
+                    n.classList.add('exit-up');
+                    setTimeout(() => n.classList.remove('exit-up'), 500);
+                }
+            });
+            clearTimeout(nameTimeout);
+            const nextEl = document.getElementById('pn' + idx);
+            if (nextEl) {
+                nextEl.classList.remove('exit-up');
+                nameTimeout = setTimeout(() => { nextEl.classList.add('active') }, 50);
+            }
+        }
+
+        function goTo(idx) {
+            if (isAnimating || idx === active) return;
+            isAnimating = true;
+            updateName(idx);
+            active = idx;
+            renderCards();
+            const dots = dotsEl.querySelectorAll('.dot');
+            if (dots.length) {
+                dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+            }
+            setTimeout(() => isAnimating = false, 650);
+        }
+
+        function next() { goTo((active + 1) % plants.length) }
+        function prev() { goTo((active - 1 + plants.length) % plants.length) }
+
+        track.addEventListener('mousemove', e => {
+            const r = track.getBoundingClientRect();
+            const mx = e.clientX - r.left;
+            const my = e.clientY - r.top;
+            cur.style.opacity = '1';
+            cur.style.left = (mx - 24) + 'px';
+            cur.style.top = (my - 24) + 'px';
+            curArrow.textContent = mx < r.width / 2 ? '‹' : '›';
+        });
+        track.addEventListener('mouseenter', () => clearInterval(autoPlay));
+        track.addEventListener('mouseleave', () => {
+            cur.style.opacity = '0';
+            updateName(active);
+            clearInterval(autoPlay);
+            autoPlay = setInterval(() => { if (document.visibilityState === 'visible') next() }, 3800);
+        });
+        track.addEventListener('click', e => {
+            const r = track.getBoundingClientRect();
+            if (e.clientX - r.left < r.width / 2) next(); else prev();
+        });
+
+        let startX = 0;
+        track.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+            clearInterval(autoPlay);
+        }, { passive: true });
+        track.addEventListener('touchend', e => {
+            const dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 40) { dx > 0 ? next() : prev() }
+            clearInterval(autoPlay);
+            autoPlay = setInterval(() => { if (document.visibilityState === 'visible') next() }, 3800);
+        }, { passive: true });
+
+        buildNameDisplay();
+        buildDots();
+        renderCards();
+
+        window.addEventListener('resize', renderCards);
+        
+        let autoPlay = setInterval(() => { if (document.visibilityState === 'visible') next() }, 3800);
+    }
 
 })(jQuery);
 

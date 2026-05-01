@@ -90,50 +90,45 @@
         </div>
     </nav>
 
-    <!-- Hero Section - Fullscreen Video + Parallax + Glass Card -->
-    <header class="hero-section" id="home">
-        <!-- Video Background Layer (parallax - moves slower) -->
-        <div class="hero-video-wrap" data-parallax="0.4">
-            <video class="hero-video-bg" id="heroVideoBg" muted loop playsinline preload="auto" autoplay>
-            </video>
-            <div class="hero-video-overlay"></div>
+    <!-- 3D Carousel Hero Section -->
+    <header class="hero dashboard-custom-section" id="home">
+        <!-- Cursor Glow for Hero -->
+        <div id="cursorGlowHero"></div>
+        
+        <div class="bg-orbs">
+            <div class="orb orb1"></div>
+            <div class="orb orb2"></div>
+            <div class="orb orb3"></div>
         </div>
 
-        <!-- Noise Grain Layer (Removed to show natural video) -->
+        <div class="tag-chip">✦ وصلت تشكيلة جديدة</div>
 
-        <!-- Content Layer (parallax - moves faster) -->
-        <div class="hero-content-wrap" data-parallax="1">
-            <div class="container-fluid h-100 px-lg-5">
-                <div class="row align-items-center justify-content-start h-100">
-                    <div class="col-lg-7 col-md-9 hero-card-col pe-lg-5">
-                        <!-- Floating Glass UI Card -->
-                        <div class="hero-glass-card" data-mouse-parallax>
-                            <div class="hero-card-inner">
-                                <!-- Root-growing text reveal -->
-                                <h1 class="hero-title mask-reveal">
-                                    <span class="mask-line">نُعيد الحياة للتربة</span>
-                                </h1>
-                                <p class="hero-subtitle mask-reveal mask-delay-1">
-                                    حلول عضوية ذكية لنمو نباتات أقوى
-                                </p>
-                                <p class="hero-tags mask-reveal mask-delay-2">
-                                    أسمدة حيوية – كمبوست معالج – تحسين التربة
-                                </p>
-                                <div class="d-flex align-items-center gap-3">
-                                    <a href="#products" class="hero-cta mask-reveal mask-delay-3">
-                                        <i class="fas fa-seedling ms-2"></i>
-                                        ابدأ الزراعة
-                                    </a>
-                                    <a href="#contact" class="hero-cta-secondary mask-reveal mask-delay-3">
-                                        <i class="fas fa-envelope ms-2"></i>
-                                        تواصل معنا
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="hero-text">
+            <div class="eyebrow"><div class="eyebrow-dot"></div>نباتات داخلية مختارة بعناية</div>
+            <h1 class="headline">أضِف <em>الحياة</em><br>إلى كل<br>زاوية.</h1>
+            <p class="subline">نباتات مختارة بعناية لكل مساحة — توصيل مجاني للطلبات فوق 200 درهم</p>
+            <div class="cta-row">
+                <a href="#products" class="btn-p" style="text-decoration:none;">تسوّق الآن →</a>
+                <a href="#products" class="btn-g" style="text-decoration:underline;">استعرض جميع النباتات</a>
+            </div>
+        </div>
+
+        <div class="carousel-zone">
+            <div class="product-name-display" id="pnDisplay"></div>
+            <div class="carousel-track" id="track">
+                <div class="carousel-cursor" id="cur">
+                    <span class="cursor-arrow" id="curArrow">‹</span>
                 </div>
             </div>
+            <div class="indicators" id="dots"></div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat"><div class="stat-n">+200</div><div class="stat-l">تنوع نباتي</div></div>
+            <div class="stat-sep"></div>
+            <div class="stat"><div class="stat-n">4.9★</div><div class="stat-l">متوسط التقييم</div></div>
+            <div class="stat-sep"></div>
+            <div class="stat"><div class="stat-n">+5k</div><div class="stat-l">عميل سعيد</div></div>
         </div>
     </header>
 
@@ -850,83 +845,7 @@
 
     <!-- Cache Buster: 2026-02-08 -->
 
-    <!-- Hero Section: Parallax, Mask Reveal, Video -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Root-growing mask reveal (text appears like growing roots) ---
-            const maskEls = document.querySelectorAll('.mask-reveal');
-            const runReveal = () => {
-                maskEls.forEach(el => el.classList.add('mask-visible'));
-            };
-            if (document.readyState === 'complete') {
-                setTimeout(runReveal, 400);
-            } else {
-                window.addEventListener('load', () => setTimeout(runReveal, 400));
-            }
 
-            // --- Hero video: swap source for mobile and autoplay ---
-            const heroVideo = document.getElementById('heroVideoBg');
-            if (heroVideo) {
-                const mobileSrc = './assets/video/hero-bg-mobile.mp4';
-                const desktopSrc = './assets/video/hero-bg.mp4';
-
-                function setHeroVideoSrc() {
-                    const isMobile = window.innerWidth <= 768;
-                    const targetSrc = isMobile ? mobileSrc : desktopSrc;
-                    // Only reload if the source actually changed
-                    if (heroVideo.getAttribute('data-current-src') !== targetSrc) {
-                        heroVideo.setAttribute('data-current-src', targetSrc);
-                        heroVideo.src = targetSrc;
-                        heroVideo.load();
-                        heroVideo.play().catch(() => { });
-                    }
-                }
-
-                setHeroVideoSrc();
-                window.addEventListener('resize', setHeroVideoSrc);
-                window.addEventListener('orientationchange', setHeroVideoSrc);
-            }
-
-            // --- Scroll parallax: soil/video moves slower than text ---
-            const heroSection = document.getElementById('home');
-            const videoWrap = document.querySelector('.hero-video-wrap');
-            const contentWrap = document.querySelector('.hero-content-wrap');
-
-            const onScroll = () => {
-                if (!heroSection || !videoWrap || !contentWrap) return;
-                const rect = heroSection.getBoundingClientRect();
-                const h = rect.height;
-                if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-
-                const t = Math.max(0, -rect.top);
-                const progress = Math.min(1, t / (h * 0.5));
-                const videoLag = progress * 45;
-                const contentMove = progress * 15;
-
-                videoWrap.style.transform = `translate3d(0, ${videoLag}px, 0) scale(1.03)`;
-                contentWrap.style.transform = `translate3d(0, ${contentMove}px, 0)`;
-            };
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
-
-            // --- Mouse parallax (slight depth on glass card) ---
-            const glassCard = document.querySelector('[data-mouse-parallax]');
-            if (glassCard) {
-                glassCard.addEventListener('mousemove', (e) => {
-                    const rect = glassCard.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width - 0.5;
-                    const y = (e.clientY - rect.top) / rect.height - 0.5;
-                    const tiltX = y * 4;
-                    const tiltY = -x * 4;
-                    glassCard.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(10px)`;
-                });
-                glassCard.addEventListener('mouseleave', () => {
-                    glassCard.style.transform = '';
-                });
-            }
-        });
-    </script>
 
     <!-- Spline Logo Remover - Enhanced for Multiple Viewers -->
     <script>
